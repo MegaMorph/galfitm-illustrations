@@ -10,9 +10,9 @@ import numpy
 shape = (100,100)
 
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
-zp = numpy.array([17.021,15.909,15.041,14.549,14.262,14.146,14.034,13.793,13.603])
+zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
 
-def make_images(noiselevel=5,
+def make_images(model='A', noiselevel=5,
                 bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
     
     noisebands = 10**(-0.4*(zp-15.0)) * noiselevel
@@ -21,7 +21,7 @@ def make_images(noiselevel=5,
     for n in noisebands:
         noise.append(numpy.random.normal(0.0, n, shape))
 
-    gals = glob('*.galfit')
+    gals = glob('model%s.galfit'%model)
 
     for g in gals:
         os.system('galfit %s'%g)
@@ -32,8 +32,12 @@ def make_images(noiselevel=5,
                 ext = img['MODEL_'+b]
                 print ext.name, j, noisebands[j]
                 ext.data += noise[j]
-                ext.writeto(imgname+'_%s_n%i.fits'%(b, noiselevel), clobber=True)
+                ext.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), clobber=True)
 
 if __name__ =='__main__':
-    make_images(5)
-    make_images(50, ['H'])
+    make_images('A', 5)
+    make_images('A', 50, ['H'])
+    make_images('B', 5)
+    make_images('B', 50, ['H'])
+    make_images('C', 5)
+    make_images('D', 5)

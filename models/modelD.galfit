@@ -3,7 +3,7 @@
 A) none,none,none,none,none,none,none,none,none  # Input data image (FITS file)
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
-B) modelA.fits         # Output data image block
+B) modelD.fits         # Output data image block
 C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
 D) psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
@@ -35,26 +35,26 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 1
  0) sersic                 #  Component type
  1) 50.0  50.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 18.546,17.519,15.753,15.084,14.764,14.623,14.433,14.02,13.78  0  bands  #  Integrated magnitude
  4) 5.0         0          #  R_e (effective radius)   [pix]
  5) 4.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
  7) 0.0000      0          #     ----- 
  8) 0.0000      0          #     ----- 
- 9) 0.8         0          #  Axis ratio (b/a)  
+ 9) 1.0         0          #  Axis ratio (b/a)  
 10) 45.0        0          #  Position angle (PA) [deg: Up=0, Left=90]
  Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
 
 # Component number: 2
  0) sersic                 #  Component type
  1) 50.0  50.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 16.999,16.127,15.753,15.529,15.389,15.41,15.384,15.192,15.281  0  bands  #  Integrated magnitude
  4) 10.0         0         #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
  7) 0.0000      0          #     ----- 
  8) 0.0000      0          #     ----- 
- 9) 0.4         0          #  Axis ratio (b/a)  
+ 9) 0.8         0          #  Axis ratio (b/a)  
 10) 45.0        0          #  Position angle (PA) [deg: Up=0, Left=90]
  Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
 

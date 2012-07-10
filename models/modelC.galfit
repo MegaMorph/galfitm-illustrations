@@ -3,7 +3,7 @@
 A) none,none,none,none,none,none,none,none,none  # Input data image (FITS file)
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
-B) modelA.fits         # Output data image block
+B) modelC.fits         # Output data image block
 C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
 D) psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
@@ -35,7 +35,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 1
  0) sersic                 #  Component type
  1) 50.0  50.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 18.229,16.974,15.753,15.258,14.934,14.827,14.623,14.276,14.13  0  bands  #  Integrated magnitude
  4) 5.0         0          #  R_e (effective radius)   [pix]
  5) 4.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -48,7 +48,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 2
  0) sersic                 #  Component type
  1) 50.0  50.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 17.328,16.509,15.753,15.374,15.112,15.056,14.882,14.597,14.5  0  bands  #  Integrated magnitude
  4) 10.0         0         #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
