@@ -94,10 +94,6 @@ def calc_seds(order=5, extremes=False):
     # pyplot.plot(w, foffset, 'ok')
     # pyplot.plot(w, foffset_sp, 'ob')
     # pyplot.plot(w, foffset_el, 'or')
-    print [round(i, 3) for i in offset + 15]
-    print [round(i, 3) for i in offset_sp + 15]
-    print [round(i, 3) for i in offset_el + 15]
-    print [round(i, 3) for i in offset_combined + 15]
     fig = pyplot.figure()
     ax1 = fig.add_subplot(111)
     ax1.plot(w, offset, 'x-k')
@@ -121,6 +117,24 @@ def calc_seds(order=5, extremes=False):
         fig.savefig('extreme_seds.pdf')
     else:
         fig.savefig('seds.pdf')
+    print
+    print '### Figures for models'
+    print 'Overall SED:',
+    print galfit_format(offset + 15)
+    print 'Overall SED (half flux):',
+    print galfit_format(offset + 15 - 2.5*numpy.log10(fcomb))
+    print 'Disk SED (half flux):',
+    print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
+    print 'Spheroid SED (half flux):',
+    print galfit_format(offset_el + 15 - 2.5*numpy.log10(fcomb))
+    print 'Disk+Spheroid combined SED:',
+    print galfit_format(offset_combined + 15)
+    print 'Disk+Spheroid combined SED (half flux):',
+    print galfit_format(offset_combined + 15 - 2.5*numpy.log10(fcomb))
+
+def galfit_format(x):
+    return repr([round(i, 3) for i in x]).replace(' ', '')
+
 
 if __name__ =='__main__':
     calc_seds()
