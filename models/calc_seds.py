@@ -3,6 +3,8 @@ from scipy.optimize import fmin_powell as fmin
 from scipy.stats import scoreatpercentile
 from matplotlib import pyplot
 
+d = pyfits.getdata('/Users/spb/Work/projects/MegaMorph/gama_cats/SersicCatAllv07.fits', 1)
+
 def func(r, w, order):
     f = 0.0
     for i in range(order):
@@ -22,8 +24,6 @@ def combfunc(x, m1, m2):
 
 def mincombfunc(x, m1, m2, match):
     return ((combfunc(x, m1, m2) - match)**2).sum()
-
-#d = pyfits.getdata('/Users/spb/Work/projects/MegaMorph/gama_cats/SersicCatAllv07.fits', 1)
 
 def calc_seds(order=5, extremes=False):
     GI = (d.field('GAL_MAG_G') - d.field('GAL_MAG_I'))
@@ -137,7 +137,7 @@ def calc_seds(order=5, extremes=False):
         print 'Disk SED (split flux, fraction = %f):'%fcomb,
         print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
         print 'Spheroid SED (split flux, fraction = %f):'%(1-fcomb),
-        print galfit_format(offset_el + 15 - 2.5*numpy.log10(fcomb))
+        print galfit_format(offset_el + 15 - 2.5*numpy.log10(1-fcomb))
     
 
 def galfit_format(x):
