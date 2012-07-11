@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# Note that this should be used with original GALFIT.
-
 from glob import glob
 import pyfits
 import sys, os
