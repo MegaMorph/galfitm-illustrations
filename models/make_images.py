@@ -39,5 +39,7 @@ if __name__ =='__main__':
     make_images('A', 50, ['H'])
     make_images('B', 5)
     make_images('B', 50, ['H'])
-    make_images('C', 5)
+    for x in 'abcdefghi':
+        make_images('C'+x, 5, ['r'])
     make_images('D', 5)
+    make_images('E', 5)
