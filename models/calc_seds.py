@@ -123,14 +123,22 @@ def calc_seds(order=5, extremes=False):
     print galfit_format(offset + 15)
     print 'Overall SED (half flux):',
     print galfit_format(offset + 15 - 2.5*numpy.log10(fcomb))
-    print 'Disk SED (half flux):',
+    print 'Disk SED (split flux, fraction=%f):'%fcomb,
     print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
-    print 'Spheroid SED (half flux):',
+    print 'Spheroid SED (split flux, fraction=%f):'%(1-fcomb),
     print galfit_format(offset_el + 15 - 2.5*numpy.log10(fcomb))
     print 'Disk+Spheroid combined SED:',
     print galfit_format(offset_combined + 15)
     print 'Disk+Spheroid combined SED (half flux):',
     print galfit_format(offset_combined + 15 - 2.5*numpy.log10(fcomb))
+    print
+    print '### Figures for model C'
+    for fcomb in numpy.arange(0.1, 0.95, 0.1):
+        print 'Disk SED (split flux, fraction = %f):'%fcomb,
+        print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
+        print 'Spheroid SED (split flux, fraction = %f):'%(1-fcomb),
+        print galfit_format(offset_el + 15 - 2.5*numpy.log10(fcomb))
+    
 
 def galfit_format(x):
     return repr([round(i, 3) for i in x]).replace(' ', '')
