@@ -30,7 +30,7 @@ def make_images(model='A', noiselevel=5,
                 ext = img['MODEL_'+b]
                 print ext.name, j, noisebands[j]
                 ext.data += noise[j]
-                ext.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), clobber=True)
+                pyfits.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), ext.data, clobber=True)
 
 if __name__ =='__main__':
     make_images('A', 5)
