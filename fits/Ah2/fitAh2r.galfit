@@ -1,6 +1,6 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/model_A_3r_n5.fits  # Input data image (FITS file)
+A) ../../models/modelA_3r_n5.fits  # Input data image (FITS file)
 B) fitAh2r.fits         # Output data image block
 C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
 D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits  # Input PSF image and (optional) diffusion kernel

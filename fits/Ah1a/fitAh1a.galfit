@@ -1,6 +1,6 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/model_A_1u_n5.fits,../../models/model_A_2g_n5.fits,../../models/model_A_3r_n5.fits,../../models/model_A_4i_n5.fits,../../models/model_A_5z_n5.fits,../../models/model_A_6Y_n5.fits,../../models/model_A_7J_n5.fits,../../models/model_A_8H_n50.fits,../../models/model_A_9K_n5.fits  # Input data image (FITS file)
+A) ../../models/modelA_1u_n5.fits,../../models/modelA_2g_n5.fits,../../models/modelA_3r_n5.fits,../../models/modelA_4i_n5.fits,../../models/modelA_5z_n5.fits,../../models/modelA_6Y_n5.fits,../../models/modelA_7J_n5.fits,../../models/modelA_8H_n50.fits,../../models/modelA_9K_n5.fits  # Input data image (FITS file)
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
 B) fitAh1a.fits         # Output data image block

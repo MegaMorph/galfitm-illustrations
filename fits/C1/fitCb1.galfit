@@ -1,8 +1,6 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/model_Cb_1u_n5.fits,../../models/model_Cb_2g_n5.fits,../../models/model_Cb_3r_n5.fits,../../models/model_Cb_4i_n5.fits,../../models/model_Cb_5z_n5.fits,../../models/model_Cb_6Y_n5.fits,../../models/model_Cb_7J_n5.fits,../../models/model_Cb_8H_n5.fits,../../models/model_Cb_9K_n5.fits  # Input data image (FITS file)
-A1) u,g,r,i,z,Y,J,H,K                                # Band labels
-A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
+A) ../../models/modelCb_3r_n5.fits  # Input data image (FITS file)
 B) fitCb1.fits         # Output data image block
 C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
 D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
@@ -35,9 +33,9 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 1
  0) sersic                 #  Component type
  1) 50.0  50.0  1 1        #  Position x, y
- 3) 17.0,16.0,15.0,14.0,14.0,14.0,14.0,13.0,13.0  7  bands  #  Integrated magnitude
- 4) 7.0         3          #  R_e (effective radius)   [pix]
- 5) 2.0         3          #  Sersic index n (de Vaucouleurs n=4) 
+ 3) 15.0        1          #  Integrated magnitude
+ 4) 7.0         1          #  R_e (effective radius)   [pix]
+ 5) 2.0         1          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
  7) 0.0000      0          #     ----- 
  8) 0.0000      0          #     ----- 
