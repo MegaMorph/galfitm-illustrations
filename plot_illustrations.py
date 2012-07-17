@@ -30,19 +30,21 @@ labels = {'MAG': '$m$', 'Re': '$R_e$', 'n': '$n$', 'AR': '$b/a$', 'PA': '$\\thet
 wlfuncs = {'A1c': numpy.log10, 'Ah1c': numpy.log10}
 
 def plot_all():
-    plot(('A2', 'A1'), '1', 'True')
-    plot(('Ah2', 'Ah1'), '2', 'True')  # and fit 3
-    plot(('Bh2', 'Bh1'), '3', 'True')  # and fit 3
-    plot(('A1c', 'A1'), '4', 'True')  # add additional wavelength scale
-    plot(('Ah1c', 'Ah1'), '4h', 'True')  # add additional wavelength scale
-    plot(('A1', 'A1a', 'A1b'), '5', 'True')
-    plot(('Ah1', 'Ah1a', 'Ah1b'), '5h', 'True')
-    # plot(('A1', 'A1c', 'A1d'), '6', 'True')
-    # plot(('Ah1', 'Ah1c', 'Ah1d'), '6h', 'True')
+    plot(('A2', 'A1'), 1, '1', 'True')
+    plot(('Ah2', 'Ah1'), 1, '2', 'True')  # and fit 3
+    plot(('Bh2', 'Bh1'), 1, '3', 'True')  # and fit 3
+    plot(('A1c', 'A1'), 1, '4', 'True')  # add additional wavelength scale
+    plot(('Ah1c', 'Ah1'), 1, '4h', 'True')  # add additional wavelength scale
+    plot(('A1', 'A1a', 'A1b'), 1, '5', 'True')
+    plot(('Ah1', 'Ah1a', 'Ah1b'), 1, '5h', 'True')
+    # plot(('A1', 'A1c', 'A1d'), 1, '6', 'True')
+    # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '6h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D1',), '8')  # and D2 and D3
+    plot(('D1',), 1, '8', 'True')  # and D2 and D3
+    plot(('A4', 'A5'), 1, '9-1', 'True') # and A6
+    plot(('A4', 'A5'), 2, '9-2', 'True') # and A6
     
-def plot(id=('A2', 'A1'), name='0', show_func=False,
+def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std):
     print name, ':', id
     res = [fit_results(i) for i in id]
@@ -56,8 +58,8 @@ def plot(id=('A2', 'A1'), name='0', show_func=False,
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (nvar, 1, i+1), labels[v], i==0, i==nvar-1)
         if v == 'MAG':
-            pyplot.plot(w, simmag, '-k')
-        plotres(res, id, 'COMP1_'+v, func)
+            pyplot.plot(w, simmag, '-xk')
+        plotres(res, id, 'COMP%i_%s'%(compno, v), func)
         pyplot.ylim(ylim[v])
         if i==0:
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16}) 
@@ -72,7 +74,10 @@ def plotres(res, id, field, func=None):
     color = ['Green', 'MediumPurple', 'Orange', 'MediumTurqoise']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
-        x = w + 100 * (1+i//2) * (-1)**i
+        if nid%2 == 0:
+            x = w + 100 * (1+i//2) * (-1)**i
+        else:
+            x = w + 100 * (i//2) * (-1)**i            
         if func is not None and func[i] is not None:
             plotfunc(func[i][field], wlfunc=wlfuncs.get(iid), color=color[i])
         pyplot.errorbar(x, res[i][field], res[i][field+'_ERR'], color=color[i],
