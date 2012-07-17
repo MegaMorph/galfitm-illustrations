@@ -16,12 +16,21 @@ w = numpy.array([3543,4770,6231,7625,9134,10305,12483,16313,22010], numpy.float)
 
 xlim = (2000, 23000)
 
-simmag = numpy.array([16.935,15.964,15.0,14.562,14.267,14.183,13.992,13.672,13.547])
+simmag_std = numpy.array([16.935,15.964,15.0,14.562,14.267,14.183,13.992,13.672,13.547])
+simmag_half = numpy.array([17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299])
+simmag_disk = numpy.array([17.328,16.509,15.753,15.374,15.112,15.056,14.882,14.597,14.5])
+simmag_bulge = numpy.array([18.229,16.974,15.753,15.258,14.934,14.827,14.623,14.276,14.13])
 
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 
-ylim_std = {'MAG': (17.51, 12.49), 'Re': (0.01, 11.99), 'n': (0.01, 5.99),
-            'AR': (0.41, 0.79), 'PA': (30.01, 59.99)}
+ylim_std = {'MAG': (17.51, 12.49), 'Re': (0.01, 10.99), 'n': (0.01, 5.99),
+            'AR': (0.41, 0.79), 'PA': (35.01, 64.99)}
+
+ylim_disk = {'MAG': (18.51, 13.49), 'Re': (3.01, 8.99), 'n': (0.01, 2.99),
+             'AR': (0.21, 0.59), 'PA': (35.01, 64.99)}
+
+ylim_bulge = {'MAG': (18.51, 13.49), 'Re': (0.01, 5.99), 'n': (2.01, 7.99),
+              'AR': (0.61, 1.09), 'PA': (0.01, 89.99)}
 
 varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
 
@@ -35,17 +44,21 @@ def plot_all():
     plot(('Bh2', 'Bh1'), 1, '3', 'True')  # and fit 3
     plot(('A1c', 'A1'), 1, '4', 'True')  # add additional wavelength scale
     plot(('Ah1c', 'Ah1'), 1, '4h', 'True')  # add additional wavelength scale
-    plot(('A1', 'A1a', 'A1b'), 1, '5', 'True')
-    plot(('Ah1', 'Ah1a', 'Ah1b'), 1, '5h', 'True')
+    plot(('A1', 'A1a', 'A1b'), 1, '5', 'True', varlist=('MAG',))
+    plot(('Ah1', 'Ah1a', 'Ah1b'), 1, '5h', 'True', varlist=('MAG',))
     # plot(('A1', 'A1c', 'A1d'), 1, '6', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '6h', 'True')
     # illustration 7 requires a different kind of plot
     plot(('D1',), 1, '8', 'True')  # and D2 and D3
-    plot(('A4', 'A5'), 1, '9-1', 'True') # and A6
-    plot(('A4', 'A5'), 2, '9-2', 'True') # and A6
+    plot(('A4', 'A5'), 1, '9-1', 'True', ylim=ylim_bulge, simmag=simmag_half) # and A6
+    plot(('A4', 'A5'), 2, '9-2', 'True', ylim=ylim_disk, simmag=simmag_half) # and A6
+    plot(('D4', 'D5'), 1, '10-1', 'True', ylim=ylim_bulge, simmag=simmag_bulge) # and D6
+    plot(('D4', 'D5'), 2, '10-2', 'True', ylim=ylim_disk, simmag=simmag_disk) # and D6
+    plot(('E4', 'E5'), 1, '11-1', 'True', ylim=ylim_bulge, simmag=simmag_bulge) # and E6
+    plot(('E4', 'E5'), 2, '11-2', 'True', ylim=ylim_disk, simmag=simmag_disk) # and E6
     
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
-         varlist=varlist_std, ylim=ylim_std):
+         varlist=varlist_std, ylim=ylim_std, simmag=simmag_std):
     print name, ':', id
     res = [fit_results(i) for i in id]
     if show_func:
@@ -53,7 +66,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     else:
         func = None
     nvar = len(varlist)
-    fig = pyplot.figure(figsize=(nvar, nvar*3))
+    fig = pyplot.figure(figsize=(5, nvar*3))
     fig.subplots_adjust(bottom=0.05, top=0.94, left=0.2, right=0.95, hspace=0.05)
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (nvar, 1, i+1), labels[v], i==0, i==nvar-1)
