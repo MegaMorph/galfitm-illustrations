@@ -3,3 +3,4 @@ fit*.fits
 start*.fits
 galfit.*
 fit*.out
+start*.out
