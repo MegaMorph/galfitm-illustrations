@@ -1,4 +1,5 @@
 fit.log
 fit*.fits
+start*.fits
 galfit.*
 fit*.out
