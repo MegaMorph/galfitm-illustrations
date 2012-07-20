@@ -13,7 +13,7 @@ zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
 def make_images(model='A', noiselevel=5,
                 bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
     
-    noisebands = 10**(-0.4*(zp-15.0)) * noiselevel
+    noisebands = 10**(-0.4*(zp-15.0)) * noiselevel/2.0
 
     noise = []
     for n in noisebands:
