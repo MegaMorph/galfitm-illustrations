@@ -15,7 +15,8 @@ def run_all_fits():
         # output starting models
         for f in feedmes:
             s = f.replace('fit', 'start', 1)
-            cmd = 'nice galfit -o1 -f %s %s > %s.out; if [ $? -eq 0 ]; then echo %s: success; else echo %s: failure; fi'%(s,f,s,s,s)
+            sfn = s.replace('.galfit', '.fits')
+            cmd = 'nice galfit -o1 -f %s %s > %s.out; if [ $? -eq 0 ]; then echo %s: success; else echo %s: failure; fi'%(sfn,f,s,s,s)
             subproc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             subprocs[subproc.stdout.fileno()] = subproc
             poller.register(subproc.stdout, select.POLLHUP)
