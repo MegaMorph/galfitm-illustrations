@@ -28,7 +28,7 @@ def make_images(model='A', noiselevel=5,
         for j, b in enumerate(bands):
             if b in bandsel:
                 ext = img['MODEL_'+b]
-                print ext.name, j, noisebands[j]
+                print g, b, j, ext.name, noisebands[j]
                 ext.data += noise[j]
                 pyfits.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), ext.data, clobber=True)
 
