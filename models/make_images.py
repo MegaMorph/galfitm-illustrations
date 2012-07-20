@@ -22,7 +22,7 @@ def make_images(model='A', noiselevel=5,
     gals = glob('model%s.galfit'%model)
 
     for g in gals:
-        os.system('galfit %s'%g)
+        os.system('nice galfit %s > %s.out'%(g,g))
         imgname = g.replace('.galfit', '')
         img = pyfits.open(imgname+'.fits')
         for j, b in enumerate(bands):
