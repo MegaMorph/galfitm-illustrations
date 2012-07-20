@@ -12,6 +12,14 @@ def run_all_fits():
     for id in ids:
         os.chdir(id)
         feedmes = glob('fit*galfit')
+        # output starting models
+        for f in feedmes:
+            s = f.replace('fit', 'start', 1)
+            cmd = 'nice galfit -o1 -f %s %s > %s.out; if [ $? -eq 0 ]; then echo %s: success; else echo %s: failure; fi'%(s,f,s,s,s)
+            subproc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            subprocs[subproc.stdout.fileno()] = subproc
+            poller.register(subproc.stdout, select.POLLHUP)
+        # do proper fits
         for f in feedmes:
             cmd = 'nice galfit %s > %s.out; if [ $? -eq 0 ]; then echo %s: success; else echo %s: failure; fi'%(f,f,f,f)
             subproc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
