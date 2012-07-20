@@ -7,12 +7,17 @@ import pyfits
 import matplotlib
 from matplotlib import pyplot
 from numpy.polynomial.chebyshev import Chebyshev
+from scipy.stats import scoreatpercentile
+from RGBImage import *
 
 matplotlib.rcParams.update({'font.size': 16})
 
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 
 w = numpy.array([3543,4770,6231,7625,9134,10305,12483,16313,22010], numpy.float)
+
+zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
+zpscale = 10**(-0.4*(zp-15.0))
 
 xlim = (2000, 23000)
 
@@ -38,13 +43,13 @@ sim_E_bulge = {'MAG': numpy.array([18.546,17.519,15.753,15.084,14.764,14.623,14.
 
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 
-ylim_std = {'MAG': (17.51, 12.49), 'Re': (0.01, 10.99), 'n': (0.01, 5.99),
+ylim_std = {'MAG': (18.01, 12.49), 'Re': (0.01, 10.99), 'n': (0.01, 5.99),
             'AR': (0.41, 0.79), 'PA': (35.01, 64.99)}
 
-ylim_disk = {'MAG': (18.51, 13.49), 'Re': (3.01, 8.99), 'n': (0.01, 2.99),
+ylim_disk = {'MAG': (19.01, 13.49), 'Re': (3.01, 8.99), 'n': (0.01, 2.99),
              'AR': (0.21, 0.89), 'PA': (35.01, 64.99)}
 
-ylim_bulge = {'MAG': (18.51, 13.49), 'Re': (0.01, 5.99), 'n': (2.01, 7.99),
+ylim_bulge = {'MAG': (19.01, 13.49), 'Re': (0.01, 5.99), 'n': (2.01, 7.99),
               'AR': (0.61, 1.09), 'PA': (0.01, 89.99)}
 
 varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
@@ -90,9 +95,87 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         plotres(res, id, 'COMP%i_%s'%(compno, v), func)
         pyplot.ylim(ylim[v])
         if i==0:
-            pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16}) 
+            pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
     fig.savefig('illustration_%s.pdf'%name)
     pyplot.close('all')
+    plotimg(id, name)
+    plotcolimg(id, name)
+
+def plotimg(id, name='0'):
+    cmap_img = cmap_res = pyplot.cm.gray
+    nbands = len(bands)
+    nid = len(id)
+    fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
+    fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
+    for i, iid in enumerate(id):
+        img = fit_images(iid)
+        if i == 0:
+            vmin = []
+            vmax = []
+            for ib, b in enumerate(bands):
+                ax = fig.add_subplot(nbands, 1+2*len(id), 1+ib*(1+nid*2)+i*2)
+                if ib==nbands-1:
+                    ax.set_xlabel('image')
+                ticksoff(ax)
+                vmin.append(scoreatpercentile(img[0][ib].ravel(), 1))
+                vmax.append(scoreatpercentile(img[0][ib].ravel(), 99))
+                pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib])
+                ax.set_ylabel('$%s$'%b)
+        for ib, b in enumerate(bands):
+            ax = fig.add_subplot(nbands, 1+2*len(id), 2+ib*(1+nid*2)+i*2)
+            if ib==nbands-1:
+                ax.set_xlabel('model %s'%iid)
+            ticksoff(ax)
+            pyplot.imshow(img[1][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib])
+        for ib, b in enumerate(bands):
+            ax = fig.add_subplot(nbands, 1+2*len(id), 3+ib*(1+nid*2)+i*2)
+            if ib==nbands-1:
+                ax.set_xlabel('residual %s'%iid)
+            ticksoff(ax)
+            vrange = 0.5*(vmax[ib] - vmin[ib])
+            pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, vmin=-vrange, vmax=vrange)
+    fig.savefig('images_%s.pdf'%name)
+    pyplot.close('all')
+
+
+def plotcolimg(id, name='0', rgb='Kzu'):
+    nbands = len(bands)
+    nid = len(id)
+    beta = 2.0
+    scales = (0.02, 0.03, 0.3)
+    offsets = [0 * zpscale[bands.index(j)] for j in rgb]
+    fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
+    fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
+    for i, iid in enumerate(id):
+        img = fit_images(iid, rgb)
+        img[0] = [img[0][j] - offsets[j] for j in range(3)]
+        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        if i == 0:
+            ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
+            ticksoff(ax)
+            ax.set_xlabel('image')
+            colimg = RGBImage(*img[0], scales=scales, beta=beta).img
+            pyplot.imshow(colimg, interpolation='nearest')
+        ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('model %s'%iid)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta).img
+        pyplot.imshow(colimg, interpolation='nearest')
+        ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('residual %s'%iid)
+        colimg = RGBImage(*img[2], scales=scales, beta=0.01).img
+        pyplot.imshow(colimg, interpolation='nearest')
+    fig.savefig('colimages_%s.pdf'%name)
+    pyplot.close('all')
+
+
+def ticksoff(ax):
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+
 
 def plotres(res, id, field, func=None):
     nid = len(id)
@@ -132,11 +215,24 @@ def fit_results(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
     r = None
     if os.path.exists(fn):
-        r = pyfits.getdata('fits/%s/fit%s.fits'%(f,f), 'final_band')
+        r = pyfits.getdata(fn, 'final_band')
     else:
         r = numpy.concatenate([pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'final_band')
                               for b in bands])
     return r
+
+def fit_images(f, bands=bands):
+    fn = 'fits/%s/fit%s.fits'%(f,f)
+    r = None
+    if os.path.exists(fn):
+        original = [pyfits.getdata(fn, 'input_%s'%b) for b in bands]
+        model = [pyfits.getdata(fn, 'model_%s'%b) for b in bands]
+        residual = [pyfits.getdata(fn, 'residual_%s'%b) for b in bands]
+    else:
+        original = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'input_x') for b in bands]
+        model = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'model_x') for b in bands]
+        residual = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'residual_x') for b in bands]
+    return [original, model, residual]
 
 def fit_func(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
