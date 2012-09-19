@@ -6,8 +6,11 @@ import numpy
 import pyfits
 import matplotlib
 from matplotlib import pyplot
+from numpy import log, log10, exp, power, pi
 from numpy.polynomial.chebyshev import Chebyshev
 from scipy.stats import scoreatpercentile
+from scipy.special import gamma, gammaincinv
+from scipy.optimize import fmin
 from RGBImage import *
 
 matplotlib.rcParams.update({'font.size': 16})
@@ -264,11 +267,60 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
         ax1.set_xticklabels(['$'+i+'$' for i in bands])
     else:
         ax1.set_xticklabels([])
-    pyplot.setp(ax1.get_xticklabels(), va='baseline')
-    pyplot.setp(ax1.get_xaxis().get_major_ticks(), pad=20.)
-    pyplot.setp(ax1.get_yaxis().get_major_ticks(), pad=8.)
+    #pyplot.setp(ax1.get_xticklabels(), va='baseline')
+    #pyplot.setp(ax1.get_xaxis().get_major_ticks(), pad=20.)
+    #pyplot.setp(ax1.get_yaxis().get_major_ticks(), pad=8.)
     ax2.xaxis.labelpad = 12
     return ax1
+
+class Sersic:
+    def __init__(self, mag, re, n):
+        print mag, re, n
+        self.mag = mag
+        self.re = re
+        self.n = n
+    def __call__(self, r):
+        mag = self.mag
+        re = self.re
+        n = self.n
+        bn = self.bn()
+        mue = mag + 5.0*log10(re) + 2.5*log10(2.0*pi*n*gamma(2.0*n)*exp(bn)/power(bn, 2.0*n))
+        mu = mue + 2.5 * bn / log(10) * ((r/re)**(1.0/n) - 1.0)
+        return mu
+    def bn(self):
+        return gammaincinv(2.0*self.n, 0.5)
+
+
+def plot_profiles(id=('A1',), name='0'):
+    print name, ':', id
+    res = [fit_results(i) for i in id]
+    color = ['Green', 'MediumPurple', 'Orange', 'MediumTurqoise']
+    func = []
+    for i, iid in enumerate(id):
+        func.append([])
+        remax = 0
+        compno = 0
+        while True:
+            compno += 1
+            field = 'COMP%i_MAG'%compno
+            if field not in res[i].names:
+                break
+            mag = res[i][field]
+            re = res[i]['COMP%i_Re'%compno]
+            n = res[i]['COMP%i_n'%compno]
+            # this currently assumes major axes of components align
+            # to be more generally correct need to account for AR (and PA),
+            # and either select specific vector, or properly compute azimuthal average
+            func[i].append(Sersic(mag, re, n))
+            remax = max(remax, re.max())
+    fig = pyplot.figure(figsize=(5, 5))
+    r = numpy.arange(0.0, remax*1.0001, remax/100.0)
+    for i, iid in enumerate(id):
+        for j in range(len(func[i])):
+            pyplot.plot(r, func[i][j](r), linestyle='-', marker=marker[j], color=color[i], label="%s_%i"%(iid, j))
+    pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
+    fig.savefig('profiles_%s.pdf'%name)
+
 
 if __name__ =='__main__':
     plot_all()
