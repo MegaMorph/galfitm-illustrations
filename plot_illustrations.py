@@ -72,7 +72,7 @@ def plot_all():
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D1',), 1, '08', 'True')  # and D2 and D3
+    plot(('D1','D2'), 1, '08', 'True')  # and D2 and D3
     plot(('A4', 'A5'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge) # and A6
     plot(('A4', 'A5'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk) # and A6
     plot(('D4', 'D5'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge) # and D6
