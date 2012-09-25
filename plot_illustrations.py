@@ -104,10 +104,11 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
     fig.savefig('illustration_%s.pdf'%name)
     pyplot.close('all')
-    plotimg(id, name)
-    plotcolimg(id, name)
-    plotprof(id, name)
-    plotcolprof(id, name)
+    if compno==1:
+        plotimg(id, name)
+        plotcolimg(id, name)
+        plotprof(id, name)
+        plotcolprof(id, name)
 
 def plotimg(id, name='0'):
     cmap_img = cmap_res = pyplot.cm.gray
