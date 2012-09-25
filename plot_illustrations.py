@@ -6,6 +6,7 @@ import numpy
 import pyfits
 import matplotlib
 from matplotlib import pyplot
+from matplotlib import cm
 from numpy import log, log10, exp, power, pi
 from numpy.polynomial.chebyshev import Chebyshev
 from scipy.stats import scoreatpercentile
@@ -45,6 +46,7 @@ sim_E_bulge = {'MAG': numpy.array([18.546,17.519,15.753,15.084,14.764,14.623,14.
                'AR': numpy.array([1.0]*9), 'PA': numpy.array([45.0]*9)}
 
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
+linestyle = [':', '-', '.-', '.-.']
 
 ylim_std = {'MAG': (18.01, 12.49), 'Re': (0.01, 10.99), 'n': (0.01, 5.99),
             'AR': (0.41, 0.79), 'PA': (35.01, 64.99)}
@@ -56,6 +58,7 @@ ylim_bulge = {'MAG': (19.01, 13.49), 'Re': (0.01, 5.99), 'n': (2.01, 7.99),
               'AR': (0.61, 1.09), 'PA': (0.01, 89.99)}
 
 varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
+#varlist_std = ('MAG', 'Re', 'n')
 
 labels = {'MAG': '$m$', 'Re': '$R_e$', 'n': '$n$', 'AR': '$b/a$', 'PA': '$\\theta$'}
 
@@ -72,13 +75,13 @@ def plot_all():
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D1','D2'), 1, '08', 'True')  # and D2 and D3
-    plot(('A4', 'A5'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge) # and A6
-    plot(('A4', 'A5'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk) # and A6
-    plot(('D4', 'D5'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge) # and D6
-    plot(('D4', 'D5'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk) # and D6
-    plot(('E4', 'E5'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge) # and E6
-    plot(('E4', 'E5'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk) # and E6
+    plot(('D2','D1'), 1, '08', 'True')  # and D2 and D3
+    plot(('A5', 'A4'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge) # and A6
+    plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk) # and A6
+    plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge) # and D6
+    plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk) # and D6
+    plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge) # and E6
+    plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk) # and E6
     
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std, sim=sim_std):
@@ -103,6 +106,8 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     pyplot.close('all')
     plotimg(id, name)
     plotcolimg(id, name)
+    plotprof(id, name)
+    plotcolprof(id, name)
 
 def plotimg(id, name='0'):
     cmap_img = cmap_res = pyplot.cm.gray
@@ -273,28 +278,85 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
     ax2.xaxis.labelpad = 12
     return ax1
 
+
 class Sersic:
-    def __init__(self, mag, re, n):
-        print mag, re, n
+    # currently doesn't handle uncertainties
+    def __init__(self, mag, re, n, mag_err=None, re_err=None, n_err=None):
         self.mag = mag
         self.re = re
         self.n = n
+        self.mag_err = mag_err
+        self.re_err = re_err
+        self.n_err = n_err
     def __call__(self, r):
         mag = self.mag
         re = self.re
         n = self.n
         bn = self.bn()
         mue = mag + 5.0*log10(re) + 2.5*log10(2.0*pi*n*gamma(2.0*n)*exp(bn)/power(bn, 2.0*n))
-        mu = mue + 2.5 * bn / log(10) * ((r/re)**(1.0/n) - 1.0)
+        mu = mue + 2.5 * bn / log(10) * (power(r/re, 1.0/n) - 1.0)
         return mu
     def bn(self):
         return gammaincinv(2.0*self.n, 0.5)
 
 
-def plot_profiles(id=('A1',), name='0'):
+def plotprof(id=('A1', 'A2'), name='0'):
     print name, ':', id
+    color = [cm.gist_rainbow(i) for i in numpy.linspace(1.0, 0.0, 9)]
+    func, remax = make_funcs(id)
+    fig = pyplot.figure(figsize=(5, 5))
+    r = numpy.arange(0.0, remax*3.0001, remax/100.0)
+    for i, iid in enumerate(id):
+        print i
+        for j in range(len(func[i])):
+            for k, band in enumerate(bands):
+                if k == 0:
+                    label = "%s_%i"%(iid, j)
+                else:
+                    label = ""
+                pyplot.plot(r, func[i][j][k](r), linestyle=linestyle[i],
+                            marker=None, color=color[k], label=label)
+    pyplot.legend(loc='upper right', numpoints=1, prop={'size': 16})
+    pyplot.xlabel('$r_{\mathrm{e}}$')
+    pyplot.ylabel('$\mu$')
+    fig.gca().invert_yaxis()
+    fig.savefig('profiles_%s.pdf'%name)
+
+
+def plot_colprof(id=('A1', 'A2'), name='0'):
+    # normalised at remax and offset for display purposes
+    print name, ':', id
+    offset = 0.5
+    color = [cm.gist_rainbow(i) for i in numpy.linspace(1.0, 0.0, 9)]
+    func, remax = make_funcs(id)
+    fig = pyplot.figure(figsize=(5, 5))
+    rmax = remax*3.0001
+    r = numpy.arange(0.0, rmax, rmax/100.0)
+    for i, iid in enumerate(id):
+        print i
+        for j in range(len(func[i])):
+            for k in range(len(bands)-1):
+                if k == 0:
+                    #label = "%s_%i_%s-%s"%(iid, j, bands[k], bands[k+1])
+                    label = "%s_%i"%(iid, j)
+                else:
+                    label = ""
+                colour = (func[i][j][k](r))-(func[i][j][k+1](r))
+                colour_remax = (func[i][j][k](remax))-(func[i][j][k+1](remax))
+                colour -= colour_remax
+                colour += offset*k
+                pyplot.hlines([offset*k], 0.0, rmax, colors='grey')
+                pyplot.plot(r, colour, linestyle=linestyle[i],
+                            marker=None, color=color[k], label=label)
+    pyplot.legend(loc='upper right', numpoints=1, prop={'size': 16})
+    pyplot.xlabel('$r_{\mathrm{e}}$')
+    pyplot.ylabel('Colour')
+    pyplot.ylim(-1*offset, (len(bands)+1) * offset)
+    fig.savefig('colprofiles_%s.pdf'%name)
+
+
+def make_funcs(id):
     res = [fit_results(i) for i in id]
-    color = ['Green', 'MediumPurple', 'Orange', 'MediumTurqoise']
     func = []
     for i, iid in enumerate(id):
         func.append([])
@@ -303,7 +365,7 @@ def plot_profiles(id=('A1',), name='0'):
         while True:
             compno += 1
             field = 'COMP%i_MAG'%compno
-            if field not in res[i].names:
+            if field not in res[i].dtype.names:
                 break
             mag = res[i][field]
             re = res[i]['COMP%i_Re'%compno]
@@ -311,15 +373,12 @@ def plot_profiles(id=('A1',), name='0'):
             # this currently assumes major axes of components align
             # to be more generally correct need to account for AR (and PA),
             # and either select specific vector, or properly compute azimuthal average
-            func[i].append(Sersic(mag, re, n))
+            func[i].append([])
+            for k, band in enumerate(bands):
+                func[i][compno-1].append(Sersic(mag[k], re[k], n[k]))
             remax = max(remax, re.max())
-    fig = pyplot.figure(figsize=(5, 5))
-    r = numpy.arange(0.0, remax*1.0001, remax/100.0)
-    for i, iid in enumerate(id):
-        for j in range(len(func[i])):
-            pyplot.plot(r, func[i][j](r), linestyle='-', marker=marker[j], color=color[i], label="%s_%i"%(iid, j))
-    pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
-    fig.savefig('profiles_%s.pdf'%name)
+    return func, remax
+
 
 
 if __name__ =='__main__':
