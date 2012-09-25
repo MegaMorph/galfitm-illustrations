@@ -323,7 +323,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
     fig.savefig('profiles_%s.pdf'%name)
 
 
-def plot_colprof(id=('A1', 'A2'), name='0'):
+def plotcolprof(id=('A1', 'A2'), name='0'):
     # normalised at remax and offset for display purposes
     print name, ':', id
     offset = 0.5
