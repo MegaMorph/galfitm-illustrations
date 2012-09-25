@@ -33,11 +33,16 @@ def make_images(model='A', noiselevel=5,
                 pyfits.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), ext.data, clobber=True)
 
 if __name__ =='__main__':
+    make_images('A', 0.01)
     make_images('A', 5)
     make_images('A', 50, ['H'])
+    make_images('B', 0.01)
     make_images('B', 5)
     make_images('B', 50, ['H'])
     for x in 'abcdefghi':
+        make_images('C'+x, 0, ['r'])
         make_images('C'+x, 5, ['r'])
+    make_images('D', 0.01)
     make_images('D', 5)
+    make_images('E', 0.01)
     make_images('E', 5)
