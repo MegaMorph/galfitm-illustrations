@@ -273,9 +273,9 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
         ax1.set_xticklabels(['$'+i+'$' for i in bands])
     else:
         ax1.set_xticklabels([])
-    #pyplot.setp(ax1.get_xticklabels(), va='baseline')
-    #pyplot.setp(ax1.get_xaxis().get_major_ticks(), pad=20.)
-    #pyplot.setp(ax1.get_yaxis().get_major_ticks(), pad=8.)
+    pyplot.setp(ax1.get_xticklabels(), va='baseline')
+    pyplot.setp(ax1.get_xaxis().get_major_ticks(), pad=20.)
+    pyplot.setp(ax1.get_yaxis().get_major_ticks(), pad=8.)
     ax2.xaxis.labelpad = 12
     return ax1
 
@@ -306,6 +306,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
     color = [cm.gist_rainbow(i) for i in numpy.linspace(1.0, 0.0, 9)]
     func, remax = make_funcs(id)
     fig = pyplot.figure(figsize=(5, 5))
+    fig.subplots_adjust(bottom=0.15, top=0.95, left=0.15, right=0.95, hspace=0.0, wspace=0.0)
     r = numpy.arange(0.0, remax*3.0001, remax/100.0)
     for i, iid in enumerate(id):
         print i
@@ -331,6 +332,7 @@ def plotcolprof(id=('A1', 'A2'), name='0'):
     color = [cm.gist_rainbow(i) for i in numpy.linspace(1.0, 0.0, 9)]
     func, remax = make_funcs(id)
     fig = pyplot.figure(figsize=(5, 5))
+    fig.subplots_adjust(bottom=0.15, top=0.95, left=0.15, right=0.95, hspace=0.0, wspace=0.0)
     rmax = remax*3.0001
     r = numpy.arange(0.0, rmax, rmax/100.0)
     for i, iid in enumerate(id):
