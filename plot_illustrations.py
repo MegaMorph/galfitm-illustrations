@@ -12,6 +12,7 @@ from numpy.polynomial.chebyshev import Chebyshev
 from scipy.stats import scoreatpercentile
 from scipy.special import gamma, gammaincinv
 from scipy.optimize import fmin
+from scipy.integrate import quad
 from RGBImage import *
 
 matplotlib.rcParams.update({'font.size': 16})
@@ -282,14 +283,26 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
 
 class Sersic:
     # currently doesn't handle uncertainties
-    def __init__(self, mag, re, n, mag_err=None, re_err=None, n_err=None):
+    def __init__(self, mag, re, n, ar=1.0, pa=0.0,
+                 mag_err=None, re_err=None, n_err=None, ar_err=None, pa_err=None, xc_err=None, yc_err=None):
         self.mag = mag
         self.re = re
         self.n = n
+        self.ar = ar
+        self.pa = pa
         self.mag_err = mag_err
         self.re_err = re_err
         self.n_err = n_err
+        self.ar_err = ar_err
+        self.pa_err = pa_err
     def __call__(self, r):
+        return self.mu_r(r)
+    def mu_r(self, r):
+        # Returns the surface brightess at specified major axis radius,
+        # within annular ellipses corresponding to the shape of each component individualy 
+        # Taking, e.g. colours, this currently assumes major axes of components align
+        # to be more generally correct need to account for AR, PA, XC, YC,
+        # and either select specific vector, or properly compute azimuthal average
         mag = self.mag
         re = self.re
         n = self.n
@@ -299,6 +312,18 @@ class Sersic:
         return mu
     def bn(self):
         return gammaincinv(2.0*self.n, 0.5)
+    # These need testing
+    def I_el(self, r_m, ar_m, pa_m=0):
+        return quad(self.I_el_theta, 0, 2*pi, args=(r_m, ar_m, pa_m))[0] / (2*pi)
+    def mu_el(self, r_m, ar_m, pa_m=0):
+        return -2.5*numpy.log10(self.I_el(r_m, ar_m, pa_m))
+    def mu_el_theta(self, theta, r_m, ar_m, pa_m=0):
+        x = r_m * numpy.cos(theta - pa_m)
+        y = ar_m * r_m * numpy.sin(theta - pa_m)
+        r_c = numpy.sqrt(x**2 + self.ar**2 * y**2)
+        return self.mu_r(r_c)
+    def I_el_theta(self, theta, r_m, ar_m, pa_m=0):
+        return 10**(-0.4*self.mu_el_theta(theta, r_m, ar_m, pa_m))
 
 
 def plotprof(id=('A1', 'A2'), name='0'):
@@ -307,7 +332,8 @@ def plotprof(id=('A1', 'A2'), name='0'):
     func, remax = make_funcs(id)
     fig = pyplot.figure(figsize=(5, 5))
     fig.subplots_adjust(bottom=0.15, top=0.95, left=0.15, right=0.95, hspace=0.0, wspace=0.0)
-    r = numpy.arange(0.0, remax*3.0001, remax/100.0)
+    rmax = remax*3.0001
+    r = numpy.arange(rmax/10000.0, rmax, rmax/100.0)
     for i, iid in enumerate(id):
         print i
         for j in range(len(func[i])):
@@ -321,11 +347,15 @@ def plotprof(id=('A1', 'A2'), name='0'):
     pyplot.legend(loc='upper right', numpoints=1, prop={'size': 16})
     pyplot.xlabel('$r_{\mathrm{e}}$')
     pyplot.ylabel('$\mu$')
-    fig.gca().invert_yaxis()
+    #fig.gca().invert_yaxis()
+    pyplot.xlim(0.0, rmax)
+    pyplot.ylim(26, 16)
     fig.savefig('profiles_%s.pdf'%name)
 
 
 def plotcolprof(id=('A1', 'A2'), name='0'):
+    # need to decide and implement consistent annuli in which to determine colour
+    # would be nice to plot lines for input model too
     # normalised at remax and offset for display purposes
     print name, ':', id
     offset = 0.5
@@ -334,27 +364,36 @@ def plotcolprof(id=('A1', 'A2'), name='0'):
     fig = pyplot.figure(figsize=(5, 5))
     fig.subplots_adjust(bottom=0.15, top=0.95, left=0.15, right=0.95, hspace=0.0, wspace=0.0)
     rmax = remax*3.0001
-    r = numpy.arange(0.0, rmax, rmax/100.0)
+    r = numpy.arange(rmax/10000.0, rmax, rmax/100.0)
     for i, iid in enumerate(id):
         print i
-        for j in range(len(func[i])):
-            for k in range(len(bands)-1):
+        for k in range(len(bands)-1):
+            f1 = f2 = f1max = f2max = 0.0
+            for j in range(len(func[i])):
                 if k == 0:
                     #label = "%s_%i_%s-%s"%(iid, j, bands[k], bands[k+1])
-                    label = "%s_%i"%(iid, j)
+                    #label = "%s_%i"%(iid, j)
+                    label = "%s"%iid
                 else:
                     label = ""
-                colour = (func[i][j][k](r))-(func[i][j][k+1](r))
-                colour_remax = (func[i][j][k](remax))-(func[i][j][k+1](remax))
-                colour -= colour_remax
-                colour += offset*k
-                pyplot.hlines([offset*k], 0.0, rmax, colors='grey')
-                pyplot.plot(r, colour, linestyle=linestyle[i],
-                            marker=None, color=color[k], label=label)
+                # to use elliptically averaged surface brightnesses will need
+                # to supply multi-component fits with single-Sersic info
+                f1 += 10**(-0.4*func[i][j][k](r))
+                f2 += 10**(-0.4*func[i][j][k+1](r))
+                f1max += 10**(-0.4*func[i][j][k](remax))
+                f2max += 10**(-0.4*func[i][j][k+1](remax))
+            colour = -2.5*numpy.log10(f1/f2)
+            colour_remax = -2.5*numpy.log10(f1max/f2max)
+            colour -= colour_remax
+            colour += offset*k
+            pyplot.hlines([offset*k], 0.0, rmax, colors='grey')
+            pyplot.plot(r, colour, linestyle=linestyle[i],
+                        marker=None, color=color[k], label=label)
     pyplot.legend(loc='upper right', numpoints=1, prop={'size': 16})
     pyplot.xlabel('$r_{\mathrm{e}}$')
     pyplot.ylabel('Colour')
     pyplot.ylim(-1*offset, (len(bands)+1) * offset)
+    pyplot.xlim(0.0, rmax)
     fig.savefig('colprofiles_%s.pdf'%name)
 
 
@@ -371,14 +410,11 @@ def make_funcs(id):
             if field not in res[i].dtype.names:
                 break
             mag = res[i][field]
-            re = res[i]['COMP%i_Re'%compno]
-            n = res[i]['COMP%i_n'%compno]
-            # this currently assumes major axes of components align
-            # to be more generally correct need to account for AR (and PA),
-            # and either select specific vector, or properly compute azimuthal average
+            re, n, ar, pa, xc, yc =  [res[i]['COMP%i_%s'%(compno, par)] for par in
+                                      ('Re', 'n', 'AR', 'PA', 'XC', 'YC')]
             func[i].append([])
             for k, band in enumerate(bands):
-                func[i][compno-1].append(Sersic(mag[k], re[k], n[k]))
+                func[i][compno-1].append(Sersic(mag[k], re[k], n[k], ar[k], pa[k], xc[k], yc[k]))
             remax = max(remax, re.max())
     return func, remax
 
