@@ -58,8 +58,8 @@ ylim_disk = {'MAG': (19.01, 13.49), 'Re': (3.01, 8.99), 'n': (0.01, 2.99),
 ylim_bulge = {'MAG': (19.01, 13.49), 'Re': (0.01, 5.99), 'n': (2.01, 7.99),
               'AR': (0.61, 1.09), 'PA': (0.01, 89.99)}
 
-varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
-#varlist_std = ('MAG', 'Re', 'n')
+#varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
+varlist_std = ('MAG', 'Re', 'n')
 
 labels = {'MAG': '$m$', 'Re': '$R_e$', 'n': '$n$', 'AR': '$b/a$', 'PA': '$\\theta$'}
 
@@ -76,13 +76,13 @@ def plot_all():
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D2','D1'), 1, '08', 'True')  # and D2 and D3
-    plot(('A5', 'A4'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge) # and A6
-    plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk) # and A6
-    plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge) # and D6
-    plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk) # and D6
-    plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge) # and E6
-    plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk) # and E6
+    plot(('D2','D1'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))  # and D2 and D3
+    plot(('A5', 'A4'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n')) # and A6
+    plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re')) # and A6
+    plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n')) # and D6
+    plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re')) # and D6
+    plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
+    plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
     
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std, sim=sim_std):
@@ -98,8 +98,10 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (5, 1, i+1), labels[v], i==0, i==nvar-1)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], '-xk')
+            pyplot.plot(w, sim[v], '-k')
         plotres(res, id, 'COMP%i_%s'%(compno, v), func)
+        if v in sim.keys():
+            pyplot.plot(w, sim[v], 'xk', markersize=10.0)
         pyplot.ylim(ylim[v])
         if i==0:
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
@@ -187,12 +189,14 @@ def ticksoff(ax):
     ax.set_yticks([])
 
 
-def plotres(res, id, field, func=None):
+def plotres(res, id, field, func=None, norm=None):
     nid = len(id)
-    mec = ['black', None] * (1+nid//2)
-    mfc = ['white', 'black'] * (1+nid//2)
+    #mec = ['black', None] * (1+nid//2)
+    #mfc = ['white', 'black'] * (1+nid//2)
     #color = ['grey', 'grey'] * (1+nid//2)
-    color = ['Green', 'MediumPurple', 'Orange', 'MediumTurqoise']
+    mec = ['Green', 'MediumPurple' , 'Orange', 'MediumTurquoise']
+    mfc = ['white', 'MediumPurple', 'white', 'MediumTurquoise']
+    color = ['Green', 'MediumPurple', 'Orange', 'MediumTurquoise']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:
@@ -200,8 +204,14 @@ def plotres(res, id, field, func=None):
         else:
             x = w + 100 * (i//2) * (-1)**i            
         if func is not None and func[i] is not None:
-            plotfunc(func[i][field], wlfunc=wlfuncs.get(iid), color=color[i])
-        pyplot.errorbar(x, res[i][field], res[i][field+'_ERR'], color=color[i],
+            f = func[i][field]
+            if norm is not None:
+                f /= norm[i][field]
+            plotfunc(f, wlfunc=wlfuncs.get(iid), color=color[i])
+        r = res[i][field]
+        if norm is not None:
+            r /= norm[i][field](x)
+        pyplot.errorbar(x, r, res[i][field+'_ERR'], color=color[i],
                         marker=marker[i//2], mec=mec[i], markerfacecolor=mfc[i], linestyle='',
                         label=iid)
         ymin = min(ymin, (res[i][field]-res[i][field+'_ERR']).min())
