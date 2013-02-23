@@ -71,8 +71,8 @@ def plot_all():
     plot(('Bh2', 'Bh1'), 1, '03', 'True')  # and fit 3
     plot(('A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
     plot(('Ah1c', 'Ah1'), 1, '04h', 'True')  # add additional wavelength scale
-    plot(('A1', 'A1a', 'A1b'), 1, '05', 'True', varlist=('MAG',))
-    plot(('Ah1', 'Ah1a', 'Ah1b'), 1, '05h', 'True', varlist=('MAG',))
+    plot(('A1a', 'A1', 'A1b'), 1, '05', 'True', varlist=('MAG',))
+    plot(('Ah1a', 'Ah1', 'Ah1b'), 1, '05h', 'True', varlist=('MAG',))
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
@@ -194,24 +194,31 @@ def plotres(res, id, field, func=None, norm=None):
     #mec = ['black', None] * (1+nid//2)
     #mfc = ['white', 'black'] * (1+nid//2)
     #color = ['grey', 'grey'] * (1+nid//2)
-    mec = ['Green', 'MediumPurple' , 'Orange', 'MediumTurquoise']
-    mfc = ['white', 'MediumPurple', 'white', 'MediumTurquoise']
-    color = ['Green', 'MediumPurple', 'Orange', 'MediumTurquoise']
+    mec_func = ['DeepSkyBlue' ,'DarkGreen', 'Orange']
+    mfc_func = ['DeepSkyBlue', 'white', 'white']
+    color = ['DeepSkyBlue', 'DarkGreen', 'Orange']
+    mec_nofunc = ['MediumPurple']
+    mfc_nofunc = ['MediumPurple']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:
             x = w + 100 * (1+i//2) * (-1)**i
         else:
-            x = w + 100 * (i//2) * (-1)**i            
+            x = w + 100 * (1+i//2) * (-1)**i            
         if func is not None and func[i] is not None:
+            mec = mec_func
+            mfc = mfc_func
             f = func[i][field]
             if norm is not None:
                 f /= norm[i][field]
             plotfunc(f, wlfunc=wlfuncs.get(iid), color=color[i])
+        else:
+            mec = mec_nofunc
+            mfc = mfc_nofunc
         r = res[i][field]
         if norm is not None:
             r /= norm[i][field](x)
-        pyplot.errorbar(x, r, res[i][field+'_ERR'], color=color[i],
+        pyplot.errorbar(x, r, res[i][field+'_ERR'], color=mec[i],
                         marker=marker[i//2], mec=mec[i], markerfacecolor=mfc[i], linestyle='',
                         label=iid)
         ymin = min(ymin, (res[i][field]-res[i][field+'_ERR']).min())
