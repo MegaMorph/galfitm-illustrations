@@ -46,3 +46,5 @@ if __name__ =='__main__':
     make_images('D', 5)
     make_images('E', 0.01)
     make_images('E', 5)
+    make_images('NA', 0.01)
+    make_images('NA', 5)
