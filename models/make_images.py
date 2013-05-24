@@ -9,6 +9,7 @@ shape = (100,100)
 
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
+sky = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
 
 def make_images(model='A', noiselevel=5,
                 bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
@@ -18,6 +19,7 @@ def make_images(model='A', noiselevel=5,
     noise = []
     for n in noisebands:
         noise.append(numpy.random.normal(0.0, n, shape))
+        #pyfits.writeto('sigma_n%i.fits'%noiselevel, numpy.ones(shape)*noisebands, clobber=True)
 
     gals = glob('model%s.galfit'%model)
 
@@ -29,6 +31,7 @@ def make_images(model='A', noiselevel=5,
             if b in bandsel:
                 ext = img['MODEL_'+b]
                 print g, b, j, ext.name, noisebands[j]
+                ext.data += numpy.random.poisson(ext.data)
                 ext.data += noise[j]
                 pyfits.writeto(imgname+'_%i%s_n%i.fits'%(j+1, b, noiselevel), ext.data, clobber=True)
 
@@ -48,3 +51,7 @@ if __name__ =='__main__':
     make_images('E', 5)
     make_images('NA', 0.01)
     make_images('NA', 5)
+    make_images('NB', 0.01)
+    make_images('NB', 5)
+    make_images('NC', 0.01)
+    make_images('NC', 5)
