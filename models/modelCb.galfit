@@ -9,8 +9,8 @@ D) psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.fits,psf.f
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
 G) none                # File with parameter constraints (ASCII file) 
-H) 1   100  1   100    # Image region to fit (xmin xmax ymin ymax)
-I) 100    100          # Size of the convolution box (x y)
+H) 1   200  1   200    # Image region to fit (xmin xmax ymin ymax)
+I) 200    200          # Size of the convolution box (x y)
 J) 25.0,25.0,25.0,25.0,25.0,25.0,25.0,25.0,25.0  # Magnitude photometric zeropoint 
 K) 1.000  1.000        # Plate scale (dx dy)   [arcsec per pixel]
 O) regular             # Display type (regular, curses, both)
@@ -34,9 +34,9 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # ------------------------------------------------------------------------------
 # Component number: 1
  0) sersic                 #  Component type
- 1) 50.0  50.0  0 0        #  Position x, y
+ 1) 100.0  100.0  0 0        #  Position x, y
  3) 17.719,16.464,15.242,14.748,14.424,14.316,14.113,13.766,13.619  0  bands  #  Integrated magnitude
- 4) 3.0         0          #  R_e (effective radius)   [pix]
+ 4) 12.0         0          #  R_e (effective radius)   [pix]
  5) 4.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
  7) 0.0000      0          #     ----- 
@@ -47,9 +47,9 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 
 # Component number: 2
  0) sersic                 #  Component type
- 1) 50.0  50.0  0 0        #  Position x, y
+ 1) 100.0  100.0  0 0        #  Position x, y
  3) 18.322,17.504,16.747,16.369,16.106,16.051,15.876,15.592,15.495  0  bands  #  Integrated magnitude
- 4) 6.0         0         #  R_e (effective radius)   [pix]
+ 4) 24.0         0         #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
  7) 0.0000      0          #     ----- 
