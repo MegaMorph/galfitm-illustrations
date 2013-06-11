@@ -5,11 +5,11 @@ import pyfits
 import sys, os
 import numpy
 
-noisetype = 'realistic'  # like SDSS and UKIDSS
-noisetype = 'flat'  # all bands same zeropoint and sky
-noisetype = 'simple'  # realistic sky noise, but no noise associated with source counts
+#noisetype = 'realistic'  # like SDSS and UKIDSS
+noisetype = 'flat'  # all bands same zeropoint, but realistic sky
+# noisetype = 'simple'  # realistic sky noise, same zeropoints, but no noise associated with source counts
 
-shape = (100,100)
+shape = (200,200)
 
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 
@@ -21,7 +21,7 @@ bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 zp_sdss = numpy.array([0.0102, 0.0038, 0.0051, 0.0067, 0.0329])  # nMgy/count
 gain_sdss = numpy.array([1.71, 3.85, 4.73, 4.94, 4.62]) # e-/count
 sky_sdss = numpy.array([1.558, 2.038, 4.778, 8.655, 26.622])  # nMgy/arcsec2
-exp_sdss = numpy.array([1.0, 1.0, 1.0, 1.0, 1.0])
+exp_las = numpy.array([1, 1, 1, 1, 1])
 
 sky_sdss *= 0.396**2 * gain_sdss / zp_sdss
 zp_sdss = -2.5*numpy.log10(zp_sdss * 1e-9 / gain_sdss) # AB magnitude corresponding to 1 electron in final image
@@ -30,25 +30,29 @@ zp_sdss = -2.5*numpy.log10(zp_sdss * 1e-9 / gain_sdss) # AB magnitude correspond
 
 #Submitted query: select filterID, avg(nightZPcat) as nightZPcat, stdev(nightZPcat) as stdev_nightZPcat, avg(totalExpTime) as totalExpTime, avg(gain) as gain, avg(readnoise) as readnoise, avg(skylevel) as skylevel from MultiframeDetector M, lasFrameSets F where M.multiframeID = F.multiframeID and nightZPcat > 1e-5 group by filterID
 
-#Result:
-zp_las = numpy.array([22.842, 23.000, 23.237, 22.561])  # magnitude corresponding to 1 count / sec
-exptime_las = numpy.array([45.732, 48.157, 45.360, 45.424])  # seconds
-gain_las = numpy.array([4.5, 4.5, 4.5, 4.5])  # e- / count
-readnoise_las = numpy.array([25.0, 25.0, 25.0, 25.0])
-sky_las = numpy.array([466.873, 580.646, 6822.956, 5991.750])  # counts/pixel
-exp_las = numpy.array([2.0, 2.0, 4.0, 4.0])
+#Use (consistent) values from here:
+# http://www.jach.hawaii.edu/UKIRT/instruments/wfcam/user_guide/performance.html?printable=1#Table_3.5._Blank_Sky_-_Countrates
+zp_las = numpy.array([22.77, 23.02, 23.24, 22.57])  # magnitude corresponding to 1 count / sec
+exptime_las = numpy.array([20.0, 10.0, 10.0, 10.0])  # seconds
+exp_las = numpy.array([2, 4, 4, 4])  # J actually 2 x 4 microsteps, but this seems to match
+gain_las = numpy.array([4.5, 4.5, 4.5, 4.5])  # count / e-
+readnoise_las = numpy.array([25.0]*4)
+sky_las = numpy.array([22, 122, 760, 712])  # counts/pixel/sec
 AB_Vega = numpy.array([0.634, 0.938, 1.379, 1.900])
 
 zp_las += 2.5*numpy.log10(exptime_las*gain_las) + AB_Vega # AB magnitude corresponding to 1 electron in final image
-sky_las *= gain_las # electrons/pixel
+sky_las *= exptime_las * gain_las  # electrons/pixel
 
 zp_realistic = numpy.concatenate((zp_sdss, zp_las))
 sky_realistic = numpy.concatenate((sky_sdss, sky_las))
 exp_realistic = numpy.concatenate((exp_sdss, exp_las))
 
 zp_flat = numpy.array([29.0]*9)
-sky_flat = numpy.array([1000.0]*9)
-exp_flat = numpy.array([1.0]*9)
+#sky_flat = numpy.array([1000.0]*9)
+#sky_flat = sky_realistic * 10**(-0.4*(zp_realistic - zp_flat))
+#sky_flat = numpy.round(sky_flat / 10) * 10  # round values
+sky_flat = [100.0, 130.0, 300.0, 500.0, 1600.0, 1900.0, 3100.0, 11000.0, 12000.0]
+exp_flat = numpy.array([1]*9)
 
 # Sizes of GAMA galaxies
 # At r ~ 17, Re ~ 3 arcsec ~ 9 pixels
@@ -78,7 +82,7 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
                 print g, b, j, ext.name
                 ext.data *= 10**(0.4*(zp[j]-25+brighten))
                 if noisetype == 'simple':
-                    sigma = numpy.sqrt(sky[j])
+                    sigma = numpy.sqrt(sky[j]/exp[j])
                 else:
                     sigma = numpy.sqrt((ext.data+sky[j])/exp[j])
                 ext.data += numpy.random.normal(0.0, 1.0, sigma.shape) * sigma
