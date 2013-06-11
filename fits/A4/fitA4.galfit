@@ -1,6 +1,6 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/modelA_1u_n5.fits,../../models/modelA_2g_n5.fits,../../models/modelA_3r_n5.fits,../../models/modelA_4i_n5.fits,../../models/modelA_5z_n5.fits,../../models/modelA_6Y_n5.fits,../../models/modelA_7J_n5.fits,../../models/modelA_8H_n5.fits,../../models/modelA_9K_n5.fits  # Input data image (FITS file)
+A) ../../models/modelA_1u_f0.fits,../../models/modelA_2g_f0.fits,../../models/modelA_3r_f0.fits,../../models/modelA_4i_f0.fits,../../models/modelA_5z_f0.fits,../../models/modelA_6Y_f0.fits,../../models/modelA_7J_f0.fits,../../models/modelA_8H_f0.fits,../../models/modelA_9K_f0.fits  # Input data image (FITS file)
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
 B) fitA4.fits         # Output data image block
@@ -9,8 +9,8 @@ D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../model
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
 G) none                # File with parameter constraints (ASCII file) 
-H) 1   100  1   100    # Image region to fit (xmin xmax ymin ymax)
-I) 100    100          # Size of the convolution box (x y)
+H) 1   200  1   200    # Image region to fit (xmin xmax ymin ymax)
+I) 200    200          # Size of the convolution box (x y)
 J) 25.0,25.0,25.0,25.0,25.0,25.0,25.0,25.0,25.0  # Magnitude photometric zeropoint 
 K) 1.000  1.000        # Plate scale (dx dy)   [arcsec per pixel]
 O) regular             # Display type (regular, curses, both)
@@ -34,7 +34,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # ------------------------------------------------------------------------------
 # Component number: 1
  0) sersic                 #  Component type
- 1) 50.0  50.0  1 1        #  Position x, y
+ 1) 100.0  100.0  1 1        #  Position x, y
  3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
  4) 3.0         1          #  R_e (effective radius)   [pix]
  5) 5.0         1          #  Sersic index n (de Vaucouleurs n=4) 
@@ -47,7 +47,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 
 # Component number: 2
  0) sersic                 #  Component type
- 1) 50.0  50.0  1 1        #  Position x, y
+ 1) 100.0  100.0  1 1        #  Position x, y
  3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
  4) 15.0        1          #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 

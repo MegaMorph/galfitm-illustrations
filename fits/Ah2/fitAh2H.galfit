@@ -1,14 +1,14 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/modelA_8H_n50.fits  # Input data image (FITS file)
+A) ../../models/modelA_8H_f-2.fits  # Input data image (FITS file)
 B) fitAh2H.fits         # Output data image block
 C) none  # Sigma image name (made from data if blank or "none") 
 D) ../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
 G) none                # File with parameter constraints (ASCII file) 
-H) 1   100  1   100    # Image region to fit (xmin xmax ymin ymax)
-I) 100    100          # Size of the convolution box (x y)
+H) 1   200  1   200    # Image region to fit (xmin xmax ymin ymax)
+I) 200    200          # Size of the convolution box (x y)
 J) 25.0  # Magnitude photometric zeropoint 
 K) 1.000  1.000        # Plate scale (dx dy)   [arcsec per pixel]
 O) regular             # Display type (regular, curses, both)
@@ -32,7 +32,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # ------------------------------------------------------------------------------
 # Component number: 1
  0) sersic                 #  Component type
- 1) 50.0  50.0  1 1        #  Position x, y
+ 1) 100.0  100.0  1 1        #  Position x, y
  3) 13.0        1          #  Integrated magnitude
  4) 7.0         1          #  R_e (effective radius)   [pix]
  5) 2.0         1          #  Sersic index n (de Vaucouleurs n=4) 
