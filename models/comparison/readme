@@ -1,0 +1,72 @@
+Objects similar to the simulated models found using SDSS CasJobs query:
+
+select top 100 objid, petroMag_r, petroR50_r
+  into mag15gal
+from Galaxy
+where petroMag_r > 14.9 and petroMag_r < 15.1 and CLEAN=1
+  and dec > -1.0 and dec < 15.0 and (ra < 30 or ra > 345)
+  and expAB_r > 0.35 and expAB_r < 0.45 and petroR50_r > 3.0 and petroR50_r < 10.0
+
+SDSS corrected frame FITS downloaded.
+SDSS images are bzip2 compressed.
+Converted to electron counts using recipe at:
+http://data.sdss3.org/datamodel/files/BOSS_PHOTOOBJ/frames/RERUN/RUN/CAMCOL/frame.html
+together with average gains.
+This is done using IDL code fpCtoDN.pro
+
+UKiDSS images obtained from WFCAM Science Archive:
+http://surveys.roe.ac.uk:8080/wsa/getImage_form.jsp
+UKIDSS images are gzip compressed.
+Converted to electron counts and sky subtracted using information in the header.
+This is done using IDL code UKIDSStoDN.pro
+
+From a quick look, the closest candidate I can find is:
+http://skyserver.sdss3.org/dr9/en/tools/explore/obj.asp?id=1237678920740962497
+The AB petroMag SED of this object is:
+[ 17.44, 15.88, 15.07, 14.67, 14.37, 14.564,  14.228,  13.939,  14.02 ]
+Compare the model combined disk and spheroid SED:
+[ 16.935, 15.964, 15.000, 14.562, 14.267, 14.183, 13.992, 13.672, 13.547 ]
+which is a bit brighter in both the u-band and NIR.
+
+http://data.sdss3.org/sas/dr9/boss/photoObj/frames/301/7787/6/frame-u-007787-6-0193.fits.bz2
+http://data.sdss3.org/sas/dr9/boss/photoObj/frames/301/7787/6/frame-g-007787-6-0193.fits.bz2
+http://data.sdss3.org/sas/dr9/boss/photoObj/frames/301/7787/6/frame-r-007787-6-0193.fits.bz2
+http://data.sdss3.org/sas/dr9/boss/photoObj/frames/301/7787/6/frame-i-007787-6-0193.fits.bz2
+http://data.sdss3.org/sas/dr9/boss/photoObj/frames/301/7787/6/frame-z-007787-6-0193.fits.bz2
+
+http://surveys.roe.ac.uk/wsa/cgi-bin/getFImage.cgi?file=%2Fdisk31%2Fwsa%2Fingest%2Ffits%2F20090808_v1%2Fw20090808_01393_st.fit;mfid=2757704;extNo=4;lx=1403;hx=1702;ly=1331;hy=1630;rf=0;flip=1;uniq=1826_62_49_4781_1;xpos=150.5;ypos=150.2;band=Y;ra=358.7259987;dec=13.30414
+http://surveys.roe.ac.uk/wsa/cgi-bin/getFImage.cgi?file=%2Fdisk31%2Fwsa%2Fingest%2Ffits%2F20090808_v1%2Fw20090808_01513_sf_st.fit;mfid=2757917;extNo=4;lx=2805;hx=3403;ly=2663;hy=3260;rf=0;flip=1;uniq=1826_62_49_4781_2;xpos=299.8;ypos=299.6;band=J;ra=358.7259987;dec=13.30414
+http://surveys.roe.ac.uk/wsa/cgi-bin/getFImage.cgi?file=%2Fdisk27%2Fwsa%2Fingest%2Ffits%2F20091201_v1%2Fw20091201_00333_st.fit;mfid=3017528;extNo=4;lx=1397;hx=1697;ly=1334;hy=1633;rf=0;flip=1;uniq=1826_62_49_4781_3;xpos=151;ypos=150.2;band=H;ra=358.7259987;dec=13.30414
+http://surveys.roe.ac.uk/wsa/cgi-bin/getFImage.cgi?file=%2Fdisk27%2Fwsa%2Fingest%2Ffits%2F20091201_v1%2Fw20091201_00416_st.fit;mfid=3017650;extNo=4;lx=1398;hx=1697;ly=1333;hy=1632;rf=0;flip=1;uniq=1826_62_49_4781_4;xpos=150.2;ypos=150.6;band=K;ra=358.7259987;dec=13.30414
+
+
+Objid of other possibilities returned by CasJobs query:
+1237652943176466574
+1237656241705058421
+1237656512815759420
+1237663783118766300
+1237663462607683719
+1237666214069338364
+1237663785281847463
+1237667229293281430
+1237669516363497523
+1237669519046410470
+1237669679576383582
+1237669517440516298
+1237669702658162818
+1237669766010765404
+1237678595936485511
+1237678596482531427
+1237678618500792510
+1237678617423446153
+1237678617430065490
+1237678620106031326
+1237678618498957597
+1237678623305433184
+1237678660890132635
+1237678860081955007
+1237678905173934189
+1237678860615090297
+1237678920214511760
+1237678920740962497
+1237679319090331804
