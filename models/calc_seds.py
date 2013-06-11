@@ -3,7 +3,7 @@ from scipy.optimize import fmin_powell as fmin
 from scipy.stats import scoreatpercentile
 from matplotlib import pyplot
 
-d = pyfits.getdata('/Users/spb/Work/projects/MegaMorph/gama_cats/SersicCatAllv07.fits', 1)
+d = pyfits.getdata('/Users/spb/Work/projects/MegaMorph/gama_cats/SersicCatAllv07.fits', 1, memmap=True)
 
 def func(r, w, order):
     f = 0.0
@@ -143,6 +143,14 @@ def calc_seds(order=5, extremes=False):
 def galfit_format(x):
     return repr([round(i, 3) for i in x]).replace(' ', '')
 
+def mag_size():
+    m = d.field('GAL_MAG_R')
+    re = d.field('GAL_RE_R')
+    n = d.field('GAL_INDEX_R')
+    ok = (0 < m) & (m < 30) & (re > 0) & (re < 10) & (n > 0.5) & (n < 6)
+    fig = pyplot.figure()
+    pyplot.scatter(m[ok], re[ok], s=1, lw=0)
+    fig.savefig('mag_size.pdf')
 
 if __name__ =='__main__':
     calc_seds()
