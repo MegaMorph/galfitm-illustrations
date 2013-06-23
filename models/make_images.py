@@ -21,7 +21,7 @@ bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 zp_sdss = numpy.array([0.0102, 0.0038, 0.0051, 0.0067, 0.0329])  # nMgy/count
 gain_sdss = numpy.array([1.71, 3.85, 4.73, 4.94, 4.62]) # e-/count
 sky_sdss = numpy.array([1.558, 2.038, 4.778, 8.655, 26.622])  # nMgy/arcsec2
-exp_las = numpy.array([1, 1, 1, 1, 1])
+exp_sdss = numpy.array([1, 1, 1, 1, 1])
 
 sky_sdss *= 0.396**2 * gain_sdss / zp_sdss
 zp_sdss = -2.5*numpy.log10(zp_sdss * 1e-9 / gain_sdss) # AB magnitude corresponding to 1 electron in final image
@@ -80,7 +80,7 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
             if b in bandsel:
                 ext = img['MODEL_'+b]
                 print g, b, j, ext.name
-                ext.data *= 10**(0.4*(zp[j]-25+brighten))
+                ext.data *= 10**(0.4*(zp[j]-29+brighten))
                 if noisetype == 'simple':
                     sigma = numpy.sqrt(sky[j]/exp[j])
                 else:
