@@ -25,18 +25,25 @@ def combfunc(x, m1, m2):
 def mincombfunc(x, m1, m2, match):
     return ((combfunc(x, m1, m2) - match)**2).sum()
 
-def calc_seds(order=5, extremes=False):
+def calc_seds(order=5, colour=False, extremes=False):
     GI = (d.field('GAL_MAG_G') - d.field('GAL_MAG_I'))
     GI10 = scoreatpercentile(GI[(GI < 5) & (GI > -5)], 10)
     GI90 = scoreatpercentile(GI[(GI < 5) & (GI > -5)], 90)
-    print GI10
+    print GI10, GI90
     fig = pyplot.figure()
     pyplot.hist(GI, 28, range=(-2, 5))
     sp = (d.GAL_INDEX_R > 0.5) & (d.GAL_INDEX_R < 1.5)
+    pyplot.hist(GI[sp], 28, range=(-2, 5), alpha=0.75)
+    if colour:
+        sp &= GI < 1.25
     if extremes:
         sp &= GI < GI10
     print len(sp.nonzero()[0])
     el = (d.GAL_INDEX_R > 3.0) & (d.GAL_INDEX_R < 6.0)
+    pyplot.hist(GI[el], 28, range=(-2, 5), alpha=0.5)
+    pyplot.savefig('g-i.pdf')
+    if colour:
+        el &= GI > 1.75
     if extremes:
         el &= GI > GI90
     print len(el.nonzero()[0])
