@@ -28,23 +28,23 @@ xlim = (2000, 23000)
 
 sim_std = {'MAG': numpy.array([16.935,15.964,15.0,14.562,14.267,14.183,13.992,13.672,13.547])}
 sim_A_disk = {'MAG': numpy.array([17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299]),
-              'Re': numpy.array([6.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.4]*9), 'PA': numpy.array([45.0]*9)}
 sim_A_bulge = {'MAG': numpy.array([17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299]),
-              'Re': numpy.array([3.0]*9), 'n': numpy.array([4.0]*9),
+              'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
               'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_D_disk = {'MAG': numpy.array([17.328,16.509,15.753,15.374,15.112,15.056,14.882,14.597,14.5]),
-              'Re': numpy.array([6.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.4]*9), 'PA': numpy.array([45.0]*9)}
 sim_D_bulge = {'MAG': numpy.array([18.229,16.974,15.753,15.258,14.934,14.827,14.623,14.276,14.13]),
-               'Re': numpy.array([3.0]*9), 'n': numpy.array([4.0]*9),
+               'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
                'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_E_disk = {'MAG': numpy.array([16.999,16.127,15.753,15.529,15.389,15.41,15.384,15.192,15.281]),
-              'Re': numpy.array([6.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_E_bulge = {'MAG': numpy.array([18.546,17.519,15.753,15.084,14.764,14.623,14.433,14.02,13.78]),
-               'Re': numpy.array([3.0]*9), 'n': numpy.array([4.0]*9),
-               'AR': numpy.array([1.0]*9), 'PA': numpy.array([45.0]*9)}
+               'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
+               'AR': numpy.array([0.9]*9), 'PA': numpy.array([45.0]*9)}
 
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 linestyle = [':', '-', '.-', '.-.']
@@ -129,8 +129,8 @@ def plotimg(id, name='0'):
                 if ib==nbands-1:
                     ax.set_xlabel('image')
                 ticksoff(ax)
-                vmin.append(scoreatpercentile(img[0][ib].ravel(), 1))
-                vmax.append(scoreatpercentile(img[0][ib].ravel(), 99))
+                vmin.append(scoreatpercentile(img[0][ib].ravel(), 0.1))
+                vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9))
                 pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib])
                 ax.set_ylabel('$%s$'%b)
         for ib, b in enumerate(bands):
@@ -154,8 +154,8 @@ def plotcolimg(id, name='0', rgb='Kzu'):
     nbands = len(bands)
     nid = len(id)
     beta = 2.0
-    scales = (0.02, 0.03, 0.3)
-    offsets = [0 * zpscale[bands.index(j)] for j in rgb]
+    scales = (0.02, 0.03, 0.1)
+    offsets = (109.55, 40.0, 10.0)
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
