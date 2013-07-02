@@ -154,8 +154,8 @@ def plotcolimg(id, name='0', rgb='Kzu'):
     nbands = len(bands)
     nid = len(id)
     beta = 2.0
-    scales = (0.02, 0.03, 0.1)
-    offsets = (109.55, 40.0, 10.0)
+    scales = (0.02, 0.03, 0.2)
+    offsets = numpy.array([109.55, 40.0, 10.0])/2.0
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
