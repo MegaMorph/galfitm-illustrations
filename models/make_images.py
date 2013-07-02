@@ -82,9 +82,9 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
                 print g, b, j, ext.name
                 brighten_factor = 10**(0.4*(zp[j]-29+brighten))
                 if noisetype == 'simple':
-                    sigma = numpy.sqrt(sky[j]/exp[j]/brighten_factor)*brighten_factor
+                    sigma = numpy.sqrt(sky[j]/exp[j]*brighten_factor)/brighten_factor
                 else:
-                    sigma = numpy.sqrt((ext.data+sky[j])/exp[j]/brighten_factor)*brighten_factor
+                    sigma = numpy.sqrt((ext.data+sky[j])/exp[j]*brighten_factor)/brighten_factor
                 ext.data += numpy.random.normal(0.0, 1.0, sigma.shape) * sigma
                 pyfits.writeto(imgname+'_%i%s_%s%i_sigma.fits'%(j+1, b, noisetype[0], brighten), sigma, clobber=True)
                 pyfits.writeto(imgname+'_%i%s_%s%i.fits'%(j+1, b, noisetype[0], brighten), ext.data, clobber=True)
