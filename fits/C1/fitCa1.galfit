@@ -2,7 +2,7 @@
 # IMAGE and GALFIT CONTROL PARAMETERS
 A) ../../models/modelCa_3r_f0.fits  # Input data image (FITS file)
 B) fitCa1.fits         # Output data image block
-C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
+C) ../../models/modelCa_3r_f0_sigma.fits  
 D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)

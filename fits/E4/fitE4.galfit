@@ -4,7 +4,7 @@ A) ../../models/modelE_1u_f0.fits,../../models/modelE_2g_f0.fits,../../models/mo
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
 B) fitE4.fits         # Output data image block
-C) none,none,none,none,none,none,none,none,none  # Sigma image name (made from data if blank or "none") 
+C) ../../models/modelE_1u_f0_sigma.fits,../../models/modelE_2g_f0_sigma.fits,../../models/modelE_3r_f0_sigma.fits,../../models/modelE_4i_f0_sigma.fits,../../models/modelE_5z_f0_sigma.fits,../../models/modelE_6Y_f0_sigma.fits,../../models/modelE_7J_f0_sigma.fits,../../models/modelE_8H_f0_sigma.fits,../../models/modelE_9K_f0_sigma.fits  
 D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)

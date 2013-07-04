@@ -2,7 +2,7 @@
 # IMAGE and GALFIT CONTROL PARAMETERS
 A) ../../models/modelD_6Y_f0.fits  # Input data image (FITS file)
 B) fitD5Y.fits         # Output data image block
-C) none  # Sigma image name (made from data if blank or "none") 
+C) ../../models/modelD_6Y_f0_sigma.fits  
 D) ../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
