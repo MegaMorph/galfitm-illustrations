@@ -60,6 +60,8 @@ exp_flat = numpy.array([1]*9)
 
 # Keep r ~ 15, and set Re_bulge = 12 pixels, Re_disk = 24 pixels.
 
+fade = 1.0  # fade to r~16
+
 def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
     if noisetype == 'realistic':
         zp = zp_realistic
@@ -80,7 +82,9 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
             if b in bandsel:
                 ext = img['MODEL_'+b]
                 print g, b, j, ext.name
-                brighten_factor = 10**(0.4*(zp[j]-29+brighten))
+                zp_factor = 10**(0.4*(zp[j]-29-fade))
+                ext.data *= zp_factor
+                brighten_factor = 10**(0.4*brighten)
                 if noisetype == 'simple':
                     sigma = numpy.sqrt(sky[j]/exp[j]*brighten_factor)/brighten_factor
                 else:
