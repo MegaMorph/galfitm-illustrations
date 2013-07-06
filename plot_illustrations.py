@@ -83,7 +83,11 @@ def plot_all():
     plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re')) # and D6
     plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
     plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
-    
+    plot(('NA1n', 'NA1'), 1, 'N01', 'True')
+    plot(('NA2n', 'NA2'), 1, 'N02', 'True')
+    plot(('NA4n', 'NA4'), 1, 'N03-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('NA4n', 'NA4'), 2, 'N03-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std, sim=sim_std):
     print name, ':', id
