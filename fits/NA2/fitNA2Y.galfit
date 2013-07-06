@@ -1,0 +1,47 @@
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) ../../models/modelNA_6Y_f0.fits  # Input data image (FITS file)
+B) fitNA2Y.fits         # Output data image block
+C) ../../models/modelNA_6Y_f0_sigma.fits  
+D) ../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
+E) 1                   # PSF fine sampling factor relative to data 
+F) none                # Bad pixel mask (FITS image or ASCII coord list)
+G) none                # File with parameter constraints (ASCII file) 
+H) 1   200  1   200    # Image region to fit (xmin xmax ymin ymax)
+I) 200    200          # Size of the convolution box (x y)
+J) 29.0  # Magnitude photometric zeropoint 
+K) 1.000  1.000        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+# Component number: 1
+ 0) sersic                 #  Component type
+ 1) 100.0  100.0  1 1        #  Position x, y
+ 3) 14.0        1          #  Integrated magnitude
+ 4) 7.0         1          #  R_e (effective radius)   [pix]
+ 5) 2.0         1          #  Sersic index n (de Vaucouleurs n=4) 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.5         1          #  Axis ratio (b/a)  
+10) 0.0         1          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+
+================================================================================
