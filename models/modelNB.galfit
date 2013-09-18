@@ -35,7 +35,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 1
  0) sersic                 #  Component type
  1) 100.0  100.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0   #  Integrated magnitude
  4) 12.0         0          #  R_e (effective radius)   [pix]
  5) 4.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -48,7 +48,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 2
  0) sersic                 #  Component type
  1) 100.0  100.0  0 0        #  Position x, y
- 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0  bands  #  Integrated magnitude
+ 3) 17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299  0   #  Integrated magnitude
  4) 24.0         0         #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -61,7 +61,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 3
  0) sersic                 #  Component type
  1) 80.0  80.0  0 0        #  Position x, y
- 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0  bands  #  Integrated magnitude
+ 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0   #  Integrated magnitude
  4) 1.0         0         #  R_e (effective radius)   [pix]
  5) 0.5         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -74,7 +74,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 4
  0) sersic                 #  Component type
  1) 120.0  120.0  0 0        #  Position x, y
- 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0  bands  #  Integrated magnitude
+ 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0   #  Integrated magnitude
  4) 1.0         0         #  R_e (effective radius)   [pix]
  5) 0.5         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -87,7 +87,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 5
  0) sersic                 #  Component type
  1) 80.0  120.0  0 0        #  Position x, y
- 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0  bands  #  Integrated magnitude
+ 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0   #  Integrated magnitude
  4) 1.0         0         #  R_e (effective radius)   [pix]
  5) 0.5         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -100,7 +100,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 6
  0) sersic                 #  Component type
  1) 120.0  80.0  0 0        #  Position x, y
- 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0  bands  #  Integrated magnitude
+ 3) 20.581,19.762,19.006,18.627,18.365,18.309,18.135,17.850,17.753  0   #  Integrated magnitude
  4) 1.0         0         #  R_e (effective radius)   [pix]
  5) 0.5         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 

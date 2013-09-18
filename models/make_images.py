@@ -75,13 +75,14 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
     print 'Using sky values:', sky
     gals = glob('model%s.galfit'%model)
     for g in gals:
+        print g
         os.system('nice galfit %s > %s.out'%(g,g))
         imgname = g.replace('.galfit', '')
         img = pyfits.open(imgname+'.fits')
         for j, b in enumerate(bands):
             if b in bandsel:
                 ext = img['MODEL_'+b]
-                print g, b, j, ext.name
+                print b, j, ext.name
                 zp_factor = 10**(0.4*(zp[j]-29-fade))
                 ext.data *= zp_factor
                 brighten_factor = 10**(0.4*brighten)
