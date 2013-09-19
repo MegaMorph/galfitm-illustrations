@@ -1,7 +1,7 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
 A) ../../models/modelNA_8H_f0.fits  # Input data image (FITS file)
-B) fitNA2Hn.fits         # Output data image block
+B) fitNA2nH.fits         # Output data image block
 C) ../../models/modelNA_8H_f0_sigma.fits  
 D) ../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
