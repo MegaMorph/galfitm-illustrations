@@ -13,6 +13,7 @@ from scipy.stats import scoreatpercentile
 from scipy.special import gamma, gammaincinv
 from scipy.optimize import fmin
 from scipy.integrate import quad
+from scipy.interpolate import interp1d
 from RGBImage import *
 
 matplotlib.rcParams.update({'font.size': 16})
@@ -21,8 +22,10 @@ bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 
 w = numpy.array([3543,4770,6231,7625,9134,10305,12483,16313,22010], numpy.float)
 
-zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
-zpscale = 10**(-0.4*(zp-15.0))
+#zp = numpy.array([16.75,15.957,15.0,14.563,14.259,14.162,13.955,13.636,13.525])
+#zpscale = 10**(-0.4*(zp-15.0))
+
+zp = numpy.array([29.0]*9)
 
 xlim = (2000, 23000)
 
@@ -63,13 +66,20 @@ varlist_std = ('MAG', 'Re', 'n')
 
 labels = {'MAG': '$m$', 'Re': '$R_e$', 'n': '$n$', 'AR': '$b/a$', 'PA': '$\\theta$'}
 
-wlfuncs = {'A1c': numpy.log10, 'Ah1c': numpy.log10}
+def ugrizYJHK_cheb(wl):
+    x = numpy.array([3543.00,4770.00,6231.00,7625.00,9134.00,10305.0,12483.0,16313.0,22010.0])
+    y = numpy.array([100.000,100.058,100.217,100.541,100.924,101.307,101.631,101.790,101.848])
+    fn = interp1d(x, y, 'linear', bounds_error=False)
+    return fn(wl)
+
+wlfuncs = {'A1c': numpy.log10, 'Ah1c': numpy.log10, 'A1e': ugrizYJHK_cheb}
+
 
 def plot_all():
     plot(('A2', 'A1'), 1, '01', 'True')
     plot(('Ah2', 'Ah1'), 1, '02', 'True')  # and fit 3
     plot(('Bh2', 'Bh1'), 1, '03', 'True')  # and fit 3
-    plot(('A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
+    plot(('A1e', 'A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
     plot(('Ah1c', 'Ah1'), 1, '04h', 'True')  # add additional wavelength scale
     plot(('A1a', 'A1', 'A1b'), 1, '05', 'True', varlist=('MAG',))
     plot(('Ah1a', 'Ah1', 'Ah1b'), 1, '05h', 'True', varlist=('MAG',))
@@ -269,9 +279,10 @@ def fit_func(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
     if os.path.exists(fn):
         r = {}
-        d = pyfits.getdata('fits/%s/fit%s.fits'%(f,f), 'band_info')
-        low = d.field('wl').min()
-        high = d.field('wl').max()
+        d = pyfits.getdata('fits/%s/fit%s.fits'%(f,f), 'fit_info')[0]
+        ref = d.field('refwlband')
+        low = d.field('lowdwlband') + ref
+        high = d.field('highdwlband') + ref
         d = pyfits.getdata('fits/%s/fit%s.fits'%(f,f), 'final_cheb')
         for n in d.names:
             r[n] = Chebyshev(d.field(n), (low, high))
