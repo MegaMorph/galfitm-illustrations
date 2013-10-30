@@ -52,14 +52,14 @@ sim_E_bulge = {'MAG': 1.0 + numpy.array([18.546,17.519,15.753,15.084,14.764,14.6
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 linestyle = [':', '-', '.-', '.-.']
 
-ylim_std = {'MAG': (19.01, 13.49), 'Re': (5.01, 34.99), 'n': (0.01, 5.99),
-            'AR': (0.41, 0.79), 'PA': (35.01, 64.99)}
+ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 34.95), 'n': (0.05, 5.95),
+            'AR': (0.41, 0.79), 'PA': (35.05, 64.95)}
 
-ylim_disk = {'MAG': (20.01, 14.49), 'Re': (15.01, 34.99), 'n': (0.01, 2.99),
-             'AR': (0.21, 0.89), 'PA': (35.01, 64.99)}
+ylim_disk = {'MAG': (20.05, 14.45), 'Re': (15.05, 34.95), 'n': (0.05, 2.95),
+             'AR': (0.21, 0.89), 'PA': (35.05, 64.95)}
 
-ylim_bulge = {'MAG': (20.01, 14.49), 'Re': (5.01, 19.99), 'n': (2.01, 7.99),
-              'AR': (0.61, 1.09), 'PA': (0.01, 89.99)}
+ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 19.95), 'n': (2.05, 7.95),
+              'AR': (0.61, 1.09), 'PA': (0.05, 89.95)}
 
 #varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
 varlist_std = ('MAG', 'Re', 'n')
@@ -67,9 +67,8 @@ varlist_std = ('MAG', 'Re', 'n')
 labels = {'MAG': '$m$', 'Re': '$R_e$', 'n': '$n$', 'AR': '$b/a$', 'PA': '$\\theta$'}
 
 def ugrizYJHK_cheb(wl):
-    x = numpy.array([3543.00,4770.00,6231.00,7625.00,9134.00,10305.0,12483.0,16313.0,22010.0])
     y = numpy.array([100.000,100.058,100.217,100.541,100.924,101.307,101.631,101.790,101.848])
-    fn = interp1d(x, y, 'linear', bounds_error=False)
+    fn = interp1d(w, y, 'linear', bounds_error=False)
     return fn(wl)
 
 wlfuncs = {'A1c': numpy.log10, 'Ah1c': numpy.log10, 'A1e': ugrizYJHK_cheb}
@@ -108,7 +107,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         func = None
     nvar = len(varlist)
     fig = pyplot.figure(figsize=(5, 15))
-    fig.subplots_adjust(bottom=0.05, top=0.94, left=0.2, right=0.95, hspace=0.05)
+    fig.subplots_adjust(bottom=0.05, top=0.94, left=0.2, right=0.95, hspace=0.075)
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (5, 1, i+1), labels[v], i==0, i==nvar-1)
         if v in sim.keys():
@@ -211,8 +210,8 @@ def plotres(res, id, field, func=None, norm=None):
     mec_func = ['DeepSkyBlue' ,'DarkGreen', 'Orange']
     mfc_func = ['DeepSkyBlue', 'white', 'white']
     color = ['DeepSkyBlue', 'DarkGreen', 'Orange']
-    mec_nofunc = ['MediumPurple']
-    mfc_nofunc = ['MediumPurple']
+    mec_nofunc = ['MediumPurple', 'MediumSeaGreen']
+    mfc_nofunc = ['MediumPurple', 'MediumSeaGreen']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:

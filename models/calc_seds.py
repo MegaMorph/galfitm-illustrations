@@ -110,7 +110,7 @@ def calc_seds(order=5, colour=False, extremes=False):
     ax2 = ax1.twiny()
     ax1.set_xlim(2000, 23000)
     ax1.set_ylim(3.5, -2.5)
-    ax1.set_ylabel('mag offset $$')
+    ax1.set_ylabel('mag offset')
     ax2.set_xlabel('wavelength, $\AA$')
     ax2.set_xlim(2000, 23000)
     ax1.set_xticks(w)
