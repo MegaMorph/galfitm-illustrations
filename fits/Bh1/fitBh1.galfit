@@ -1,10 +1,10 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/modelB_1u_f0.fits,../../models/modelB_2g_f0.fits,../../models/modelB_3r_f0.fits,../../models/modelB_4i_f0.fits,../../models/modelB_5z_f0.fits,../../models/modelB_6Y_f0.fits,../../models/modelB_7J_f0.fits,../../models/modelB_8H_f-2.fits,../../models/modelB_9K_f0.fits  # Input data image (FITS file)
+A) ../../models/modelB_1u_f0.fits,../../models/modelB_2g_f-2.fits,../../models/modelB_3r_f0.fits,../../models/modelB_4i_f-2.fits,../../models/modelB_5z_f0.fits,../../models/modelB_6Y_f-2.fits,../../models/modelB_7J_f0.fits,../../models/modelB_8H_f-2.fits,../../models/modelB_9K_f0.fits  # Input data image (FITS file)
 A1) u,g,r,i,z,Y,J,H,K                                # Band labels
 A2) 3543,4770,6231,7625,9134,10305,12483,16313,22010 # Band wavelengths
 B) fitBh1.fits         # Output data image block
-C) ../../models/modelB_1u_f0_sigma.fits,../../models/modelB_2g_f0_sigma.fits,../../models/modelB_3r_f0_sigma.fits,../../models/modelB_4i_f0_sigma.fits,../../models/modelB_5z_f0_sigma.fits,../../models/modelB_6Y_f0_sigma.fits,../../models/modelB_7J_f0_sigma.fits,../../models/modelB_8H_f-2_sigma.fits,../../models/modelB_9K_f0_sigma.fits  
+C) ../../models/modelB_1u_f0_sigma.fits,../../models/modelB_2g_f-2_sigma.fits,../../models/modelB_3r_f0_sigma.fits,../../models/modelB_4i_f-2_sigma.fits,../../models/modelB_5z_f0_sigma.fits,../../models/modelB_6Y_f-2_sigma.fits,../../models/modelB_7J_f0_sigma.fits,../../models/modelB_8H_f-2_sigma.fits,../../models/modelB_9K_f0_sigma.fits  
 D) ../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits,../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)

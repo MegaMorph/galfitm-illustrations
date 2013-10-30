@@ -1,8 +1,8 @@
 ================================================================================
 # IMAGE and GALFIT CONTROL PARAMETERS
-A) ../../models/modelA_2g_f0.fits  # Input data image (FITS file)
+A) ../../models/modelA_2g_f-2.fits  # Input data image (FITS file)
 B) fitAh2g.fits         # Output data image block
-C) ../../models/modelA_2g_f0_sigma.fits  
+C) ../../models/modelA_2g_f-2_sigma.fits  
 D) ../../models/psf.fits  # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
 F) none                # Bad pixel mask (FITS image or ASCII coord list)
