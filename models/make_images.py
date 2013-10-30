@@ -98,10 +98,10 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
 if __name__ =='__main__':
     make_images('A', 0)
     make_images('A', 2)
-    make_images('A', -2, ['H'])
+    make_images('A', -2, ['g','i','Y','H'])
     make_images('B', 0)
     make_images('B', 2)
-    make_images('B', -2, ['H'])
+    make_images('B', -2, ['g','i','Y','H'])
     for x in 'abcdefghi':
         make_images('C'+x, 0, ['r'])
         make_images('C'+x, 2, ['r'])
