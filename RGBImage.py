@@ -160,7 +160,24 @@ DESCRIPTION
     # compute nonlinear mapping
     radius = beta * (r + g + b)
     nlfac = N.where(radius>0., N.arcsinh(radius)/radius, 0.)
-    return r*nlfac, g*nlfac, b*nlfac
+    r = r*nlfac
+    g = g*nlfac
+    b = b*nlfac
+    # desaturate pixels that are dominated by a single colour
+    a = (r+g+b)/3.0
+    rab = r / a / beta
+    gab = g / a / beta
+    bab = b / a / beta
+    mask = N.array((rab, gab, bab))
+    w = N.max(mask, 0)
+    N.putmask(w, w > 1.0, 1.0)
+    w = 1 - w
+    w = N.sqrt(w)
+    # w = 0.0  # or turn this off
+    r = r*w + a*(1-w)
+    g = g*w + a*(1-w)
+    b = b*w + a*(1-w)
+    return r, g, b
 
 
 class RGBImage(object):

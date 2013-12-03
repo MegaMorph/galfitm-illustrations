@@ -18,6 +18,8 @@ from RGBImage import *
 
 matplotlib.rcParams.update({'font.size': 16})
 
+rescolmap = matplotlib.colors.LinearSegmentedColormap.from_list('rescol', ('blue', 'black', 'white', 'red'), N=256, gamma=1.0)
+
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
 
 w = numpy.array([3543,4770,6231,7625,9134,10305,12483,16313,22010], numpy.float)
@@ -52,7 +54,7 @@ sim_E_bulge = {'MAG': 1.0 + numpy.array([18.546,17.519,15.753,15.084,14.764,14.6
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 linestyle = [':', '-', '.-', '.-.']
 
-ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 34.95), 'n': (0.05, 5.95),
+ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 39.95), 'n': (0.05, 5.95),
             'AR': (0.41, 0.79), 'PA': (35.05, 64.95)}
 
 ylim_disk = {'MAG': (20.05, 14.45), 'Re': (15.05, 34.95), 'n': (0.05, 2.95),
@@ -73,6 +75,9 @@ def ugrizYJHK_cheb(wl):
 
 wlfuncs = {'A1c': numpy.log10, 'Ah1c': numpy.log10, 'A1e': ugrizYJHK_cheb}
 
+def poster_plots():
+    plot(('D1', 'D4'), 1, 'D1D4-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n')) # and D6
+
 
 def plot_all():
     plot(('A2', 'A1'), 1, '01', 'True')
@@ -90,8 +95,12 @@ def plot_all():
     plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re')) # and A6
     plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n')) # and D6
     plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re')) # and D6
+    plot(('Dh5', 'Dh4'), 1, '10h-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Dh5', 'Dh4'), 2, '10h-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
     plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
     plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
+    plot(('Eh5', 'Eh4'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
+    plot(('Eh5', 'Eh4'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
     plot(('NA1n', 'NA1'), 1, 'N01', 'True')
     plot(('NA2n', 'NA2'), 1, 'N02', 'True')
     plot(('NA4n', 'NA4'), 1, 'N03-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
@@ -127,7 +136,9 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         plotcolprof(id, name)
 
 def plotimg(id, name='0'):
-    cmap_img = cmap_res = pyplot.cm.gray
+    cmap_img = pyplot.cm.gray
+    cmap_res = rescolmap
+    norm_res = None
     nbands = len(bands)
     nid = len(id)
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
@@ -137,6 +148,7 @@ def plotimg(id, name='0'):
         if i == 0:
             vmin = []
             vmax = []
+            vrange = []
             for ib, b in enumerate(bands):
                 ax = fig.add_subplot(nbands, 1+2*len(id), 1+ib*(1+nid*2)+i*2)
                 if ib==nbands-1:
@@ -144,53 +156,54 @@ def plotimg(id, name='0'):
                 ticksoff(ax)
                 vmin.append(scoreatpercentile(img[0][ib].ravel(), 0.1))
                 vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9))
-                pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib])
+                vrange.append(scoreatpercentile(img[2][ib].ravel(), 99.9) - scoreatpercentile(img[2][ib].ravel(), 0.1))
+                pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
                 ax.set_ylabel('$%s$'%b)
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 2+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
                 ax.set_xlabel('model %s'%iid)
             ticksoff(ax)
-            pyplot.imshow(img[1][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib])
+            pyplot.imshow(img[1][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 3+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
                 ax.set_xlabel('residual %s'%iid)
             ticksoff(ax)
-            vrange = 0.5*(vmax[ib] - vmin[ib])
-            pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, vmin=-vrange, vmax=vrange)
+            pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, norm=norm_res, vmin=-vrange[ib], vmax=vrange[ib], interpolation='nearest')
     fig.savefig('images_%s.pdf'%name)
     pyplot.close('all')
 
 
-def plotcolimg(id, name='0', rgb='Kzu'):
+def plotcolimg(id, name='0', rgb='Hzg'):
     nbands = len(bands)
     nid = len(id)
     beta = 2.5
-    scales = (0.03, 0.05, 0.5)
-    offsets = numpy.array([80.0, 40.0, 3.0])/2.0
+    scales = numpy.array((0.04, 0.055, 0.2))
+    offsets = numpy.array([75.0, 40.0, 8.0])
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
         img = fit_images(iid, rgb)
         img[0] = [img[0][j] - offsets[j] for j in range(3)]
         img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        img[2] = [img[2][j] + 2*offsets[j] for j in range(3)]
         if i == 0:
             ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
             ticksoff(ax)
             ax.set_xlabel('image')
             colimg = RGBImage(*img[0], scales=scales, beta=beta).img
-            pyplot.imshow(colimg, interpolation='nearest')
+            pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
         ticksoff(ax)
         ax.set_xlabel('model %s'%iid)
         colimg = RGBImage(*img[1], scales=scales, beta=beta).img
-        pyplot.imshow(colimg, interpolation='nearest')
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
         ticksoff(ax)
         ax.set_xlabel('residual %s'%iid)
-        colimg = RGBImage(*img[2], scales=scales, beta=0.01).img
-        pyplot.imshow(colimg, interpolation='nearest')
+        colimg = RGBImage(*img[2], scales=scales, beta=beta).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
     fig.savefig('colimages_%s.pdf'%name)
     pyplot.close('all')
 
@@ -448,7 +461,6 @@ def make_funcs(id):
                 func[i][compno-1].append(Sersic(mag[k], re[k], n[k], ar[k], pa[k], xc[k], yc[k]))
             remax = max(remax, re.max())
     return func, remax
-
 
 
 if __name__ =='__main__':
