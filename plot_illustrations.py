@@ -175,12 +175,13 @@ def plotimg(id, name='0'):
     pyplot.close('all')
 
 
-def plotcolimg(id, name='0', rgb='Hzg'):
+def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
     nbands = len(bands)
     nid = len(id)
     beta = 2.5
     scales = numpy.array((0.04, 0.055, 0.2))
-    offsets = numpy.array([75.0, 40.0, 8.0])
+    # offsets not so necessary now have nice desaturation feature working
+    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.25
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
@@ -192,17 +193,20 @@ def plotcolimg(id, name='0', rgb='Hzg'):
             ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
             ticksoff(ax)
             ax.set_xlabel('image')
-            colimg = RGBImage(*img[0], scales=scales, beta=beta).img
+            colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                              desaturate=desaturate, pedestal=pedestal).img
             pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
         ticksoff(ax)
         ax.set_xlabel('model %s'%iid)
-        colimg = RGBImage(*img[1], scales=scales, beta=beta).img
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=False, pedestal=pedestal).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
         ticksoff(ax)
         ax.set_xlabel('residual %s'%iid)
-        colimg = RGBImage(*img[2], scales=scales, beta=beta).img
+        colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                          desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
     fig.savefig('colimages_%s.pdf'%name)
     pyplot.close('all')
