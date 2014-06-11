@@ -120,10 +120,10 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (5, 1, i+1), labels[v], i==0, i==nvar-1)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], '-k')
+            pyplot.plot(w, sim[v], '-k', alpha=0.75)
         plotres(res, id, 'COMP%i_%s'%(compno, v), func)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], 'xk', markersize=10.0)
+            pyplot.plot(w, sim[v], 'xk', markersize=10.0, alpha=0.75)
         pyplot.ylim(ylim[v])
         if i==0:
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
@@ -266,7 +266,7 @@ def plotfunc(func, wlfunc=None, color='red', label=''):
     else:
         xfunc = wlfunc(x)
     y = func(xfunc)
-    return pyplot.plot(x, y, '-', color=color, label=label)
+    return pyplot.plot(x, y, '-', color=color, label=label, alpha=0.5)
 
 def fit_results(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
