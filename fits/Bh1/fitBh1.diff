@@ -1,0 +1,7 @@
+6,7c
+B) fitBh1.fits         # Output data image block
+C) ../../models/modelB_1u_f0_sigma.fits,../../models/modelB_2g_f-2_sigma.fits,../../models/modelB_3r_f0_sigma.fits,../../models/modelB_4i_f-2_sigma.fits,../../models/modelB_5z_f0_sigma.fits,../../models/modelB_6Y_f-2_sigma.fits,../../models/modelB_7J_f0_sigma.fits,../../models/modelB_8H_f-2_sigma.fits,../../models/modelB_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelB_1u_f0.fits,../../models/modelB_2g_f-2.fits,../../models/modelB_3r_f0.fits,../../models/modelB_4i_f-2.fits,../../models/modelB_5z_f0.fits,../../models/modelB_6Y_f-2.fits,../../models/modelB_7J_f0.fits,../../models/modelB_8H_f-2.fits,../../models/modelB_9K_f0.fits  # Input data image (FITS file)
+.

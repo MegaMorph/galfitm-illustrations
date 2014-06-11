@@ -1,0 +1,8 @@
+15a
+U) 1                   # Turn on non-parametric method
+.
+3,5c
+A) ../../models/modelNA_9K_f0.fits  # Input data image (FITS file)
+B) fitNA2nK.fits         # Output data image block
+C) ../../models/modelNA_9K_f0_sigma.fits  
+.

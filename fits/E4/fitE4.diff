@@ -1,0 +1,10 @@
+52c
+ 4) 30.0        1          #  R_e (effective radius)   [pix]
+.
+6,7c
+B) fitE4.fits         # Output data image block
+C) ../../models/modelE_1u_f0_sigma.fits,../../models/modelE_2g_f0_sigma.fits,../../models/modelE_3r_f0_sigma.fits,../../models/modelE_4i_f0_sigma.fits,../../models/modelE_5z_f0_sigma.fits,../../models/modelE_6Y_f0_sigma.fits,../../models/modelE_7J_f0_sigma.fits,../../models/modelE_8H_f0_sigma.fits,../../models/modelE_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelE_1u_f0.fits,../../models/modelE_2g_f0.fits,../../models/modelE_3r_f0.fits,../../models/modelE_4i_f0.fits,../../models/modelE_5z_f0.fits,../../models/modelE_6Y_f0.fits,../../models/modelE_7J_f0.fits,../../models/modelE_8H_f0.fits,../../models/modelE_9K_f0.fits  # Input data image (FITS file)
+.

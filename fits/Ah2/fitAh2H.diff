@@ -1,0 +1,5 @@
+3,5c
+A) ../../models/modelA_8H_f-2.fits  # Input data image (FITS file)
+B) fitAh2H.fits         # Output data image block
+C) ../../models/modelA_8H_f-2_sigma.fits  
+.

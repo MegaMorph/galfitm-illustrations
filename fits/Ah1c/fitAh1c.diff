@@ -1,0 +1,11 @@
+38c
+ 3) 17.0,16.0,15.0,14.0,14.0,14.0,14.0,13.0,13.0  5  bands  #  Integrated magnitude
+.
+5,7c
+A2) 3.549,3.679,3.795,3.882,3.961,4.013,4.096,4.213,4.343 # Band wavelengths
+B) fitAh1c.fits         # Output data image block
+C) ../../models/modelA_1u_f0_sigma.fits,../../models/modelA_2g_f-2_sigma.fits,../../models/modelA_3r_f0_sigma.fits,../../models/modelA_4i_f-2_sigma.fits,../../models/modelA_5z_f0_sigma.fits,../../models/modelA_6Y_f-2_sigma.fits,../../models/modelA_7J_f0_sigma.fits,../../models/modelA_8H_f-2_sigma.fits,../../models/modelA_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelA_1u_f0.fits,../../models/modelA_2g_f-2.fits,../../models/modelA_3r_f0.fits,../../models/modelA_4i_f-2.fits,../../models/modelA_5z_f0.fits,../../models/modelA_6Y_f-2.fits,../../models/modelA_7J_f0.fits,../../models/modelA_8H_f-2.fits,../../models/modelA_9K_f0.fits  # Input data image (FITS file)
+.
