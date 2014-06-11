@@ -159,7 +159,9 @@ DESCRIPTION
     b = N.where(b>0., b, 0.)
     # compute nonlinear mapping
     radius = beta * (r + g + b)
-    nlfac = N.where(radius>0., N.arcsinh(radius)/radius, 0.)
+    radius_ok = radius > 0.0
+    nlfac = radius * 0.0
+    nlfac[radius_ok] = N.arcsinh(radius[radius_ok])/radius[radius_ok]
     r = r*nlfac
     g = g*nlfac
     b = b*nlfac
