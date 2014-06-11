@@ -184,7 +184,7 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
     beta = 2.5
     scales = numpy.array((0.04, 0.055, 0.2))
     # offsets not so necessary now have nice desaturation feature working
-    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.25
+    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.5
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
