@@ -130,7 +130,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         pyplot.ylim(ylim[v])
         if i==0:
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
-    fig.savefig('illustration_%s.pdf'%name)
+    fig.savefig('plots/illustration_%s.pdf'%name)
     pyplot.close('all')
     if compno==1:
         plotimg(id, name)
@@ -174,7 +174,7 @@ def plotimg(id, name='0'):
                 ax.set_xlabel('residual %s'%iid)
             ticksoff(ax)
             pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, norm=norm_res, vmin=-vrange[ib], vmax=vrange[ib], interpolation='nearest')
-    fig.savefig('images_%s.pdf'%name)
+    fig.savefig('plots/images_%s.pdf'%name)
     pyplot.close('all')
 
 
@@ -211,7 +211,7 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         colimg = RGBImage(*img[2], scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
-    fig.savefig('colimages_%s.pdf'%name)
+    fig.savefig('plots/colimages_%s.pdf'%name)
     pyplot.close('all')
 
 
@@ -401,7 +401,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
     #fig.gca().invert_yaxis()
     pyplot.xlim(0.0, rmax)
     pyplot.ylim(26, 16)
-    fig.savefig('profiles_%s.pdf'%name)
+    fig.savefig('plots/profiles_%s.pdf'%name)
 
 
 def plotcolprof(id=('A1', 'A2'), name='0'):
@@ -445,7 +445,7 @@ def plotcolprof(id=('A1', 'A2'), name='0'):
     pyplot.ylabel('Colour')
     pyplot.ylim(-1*offset, (len(bands)+1) * offset)
     pyplot.xlim(0.0, rmax)
-    fig.savefig('colprofiles_%s.pdf'%name)
+    fig.savefig('plots/colprofiles_%s.pdf'%name)
 
 
 def make_funcs(id):
