@@ -35,7 +35,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 1
  0) sersic                 #  Component type
  1) 100.0  100.0  1 1        #  Position x, y
- 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  9  bands  #  Integrated magnitude
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
  4) 3.0         1          #  R_e (effective radius)   [pix]
  5) 5.0         1          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
@@ -48,7 +48,7 @@ P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 # Component number: 2
  0) sersic                 #  Component type
  1) 100.0  100.0  1 1        #  Position x, y
- 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  9  bands  #  Integrated magnitude
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
  4) 15.0        1          #  R_e (effective radius)   [pix]
  5) 1.0         0          #  Sersic index n (de Vaucouleurs n=4) 
  6) 0.0000      0          #     ----- 
