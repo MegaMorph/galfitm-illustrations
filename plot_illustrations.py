@@ -16,7 +16,10 @@ from scipy.integrate import quad
 from scipy.interpolate import interp1d
 from RGBImage import *
 
-matplotlib.rcParams.update({'font.size': 16})
+matplotlib.rcParams.update({'font.size': 16,
+                            'font.family': 'serif',
+                            'font.serif': 'times',
+                            'text.usetex': True})
 
 rescolmap = matplotlib.colors.LinearSegmentedColormap.from_list('rescol', ('blue', 'black', 'white', 'red'), N=256, gamma=1.0)
 
@@ -313,7 +316,7 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
     ax1.set_ylabel(ylabel)
     ax1.set_xlim(xlim)
     if top:
-        ax2.set_xlabel('wavelength, $\AA$')
+        ax2.set_xlabel('wavelength, \AA')
     else:
         ax2.set_xticklabels([])
     ax2.set_xlim(xlim)
@@ -387,7 +390,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
         for j in range(len(func[i])):
             for k, band in enumerate(bands):
                 if k == 0:
-                    label = "%s_%i"%(iid, j)
+                    label = "%s\_%i"%(iid, j)
                 else:
                     label = ""
                 pyplot.plot(r, func[i][j][k](r), linestyle=linestyle[i],
