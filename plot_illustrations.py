@@ -83,6 +83,10 @@ def poster_plots():
 
 
 def plot_all():
+    plot_standard()
+    plot_nonparam()
+
+def plot_standard():
     plot(('A2', 'A1'), 1, '01', 'True')
     plot(('Ah2', 'Ah1'), 1, '02', 'True')  # and fit 3
     plot(('Bh2', 'Bh1'), 1, '03', 'True')  # and fit 3
@@ -104,10 +108,17 @@ def plot_all():
     plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
     plot(('Eh5', 'Eh4'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
     plot(('Eh5', 'Eh4'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
+
+def plot_nonparam():
     plot(('NA1n', 'NA1'), 1, 'N01', 'True')
     plot(('NA2n', 'NA2'), 1, 'N02', 'True')
     plot(('NA4n', 'NA4'), 1, 'N03-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
     plot(('NA4n', 'NA4'), 2, 'N03-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('NB4n', 'NB4'), 1, 'N04-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('NB4n', 'NB4'), 2, 'N04-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('NC4n', 'NC4', 'NC4m'), 1, 'N05-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('NC4n', 'NC4', 'NC4m'), 2, 'N05-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+
 
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std, sim=sim_std):
