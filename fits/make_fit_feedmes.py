@@ -5,7 +5,6 @@ import os
 import re
 
 def make_feedmes():
-    # One-time script
     # Used to convert all the fit*.galfit files to fit*.diff
     ids = glob('*/')
     for id in ids:
