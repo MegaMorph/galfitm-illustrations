@@ -21,6 +21,8 @@ matplotlib.rcParams.update({'font.size': 16,
                             'font.serif': 'times',
                             'text.usetex': True})
 
+labelsize = 12
+
 rescolmap = matplotlib.colors.LinearSegmentedColormap.from_list('rescol', ('blue', 'black', 'white', 'red'), N=256, gamma=1.0)
 
 bands = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']
@@ -166,23 +168,23 @@ def plotimg(id, name='0'):
             for ib, b in enumerate(bands):
                 ax = fig.add_subplot(nbands, 1+2*len(id), 1+ib*(1+nid*2)+i*2)
                 if ib==nbands-1:
-                    ax.set_xlabel('image')
+                    ax.set_xlabel('image', fontsize=labelsize)
                 ticksoff(ax)
                 vmin.append(scoreatpercentile(img[0][ib].ravel(), 0.1))
                 vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9))
                 vrange.append(scoreatpercentile(img[2][ib].ravel(), 99.9) - scoreatpercentile(img[2][ib].ravel(), 0.1))
                 pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
-                ax.set_ylabel('$%s$'%b)
+                ax.set_ylabel('$%s$'%b, fontsize=labelsize)
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 2+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
-                ax.set_xlabel('model %s'%iid)
+                ax.set_xlabel('model %s'%iid, fontsize=labelsize)
             ticksoff(ax)
             pyplot.imshow(img[1][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 3+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
-                ax.set_xlabel('residual %s'%iid)
+                ax.set_xlabel('residual %s'%iid, fontsize=labelsize)
             ticksoff(ax)
             pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, norm=norm_res, vmin=-vrange[ib], vmax=vrange[ib], interpolation='nearest')
     fig.savefig('plots/images_%s.pdf'%name)
@@ -206,19 +208,19 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         if i == 0:
             ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
             ticksoff(ax)
-            ax.set_xlabel('image')
+            ax.set_xlabel('image', fontsize=labelsize)
             colimg = RGBImage(*img[0], scales=scales, beta=beta,
                               desaturate=desaturate, pedestal=pedestal).img
             pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
         ticksoff(ax)
-        ax.set_xlabel('model %s'%iid)
+        ax.set_xlabel('model %s'%iid, fontsize=labelsize)
         colimg = RGBImage(*img[1], scales=scales, beta=beta,
                           desaturate=False, pedestal=pedestal).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
         ticksoff(ax)
-        ax.set_xlabel('residual %s'%iid)
+        ax.set_xlabel('residual %s'%iid, fontsize=labelsize)
         colimg = RGBImage(*img[2], scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
