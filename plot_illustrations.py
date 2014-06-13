@@ -202,7 +202,7 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         img = fit_images(iid, rgb)
         img[0] = [img[0][j] - offsets[j] for j in range(3)]
         img[1] = [img[1][j] - offsets[j] for j in range(3)]
-        img[2] = [img[2][j] + 2*offsets[j] for j in range(3)]
+        img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
         if i == 0:
             ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
             ticksoff(ax)
