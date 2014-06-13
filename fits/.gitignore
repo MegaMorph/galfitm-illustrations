@@ -2,3 +2,5 @@ fit.log
 *.fits
 galfit.*
 *.out
+fit[^A]*.galfit
+fit???*.galfit
