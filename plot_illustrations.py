@@ -150,6 +150,10 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         plotcolimg(id, name)
         plotprof(id, name)
         plotcolprof(id, name)
+        npid = [j for j in id if j[0] == 'N' and j[-1] in 'nm']
+        if len(npid) > 0:
+            plotnonparamcolimg(npid, name)
+
 
 def plotimg(id, name='0'):
     cmap_img = pyplot.cm.gray
@@ -225,6 +229,79 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
     fig.savefig('plots/colimages_%s.pdf'%name)
+    pyplot.close('all')
+
+
+def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
+    nbands = len(bands)
+    nid = len(id)
+    beta = 2.5
+    scales = numpy.array((0.04, 0.055, 0.2))
+    # offsets not so necessary now have nice desaturation feature working
+    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.5
+    fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
+    fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
+    original_iid = None
+    for i, iid in enumerate(id):
+        # First row, results without nonparam
+        if original_iid != iid[:-1]:
+            original_iid = iid[:-1]
+            print original_iid
+            img = fit_images(original_iid, rgb)
+            img[0] = [img[0][j] - offsets[j] for j in range(3)]
+            img[1] = [img[1][j] - offsets[j] for j in range(3)]
+            img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
+            if i == 0:
+                ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
+                ticksoff(ax)
+                ax.set_title('image', fontsize=labelsize)
+                colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                                  desaturate=desaturate, pedestal=pedestal).img
+                pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+            ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
+            ticksoff(ax)
+            ax.set_title('model %s'%original_iid, fontsize=labelsize)
+            colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                              desaturate=desaturate, pedestal=pedestal).img
+            pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+            ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
+            ticksoff(ax)
+            ax.set_title('residual %s'%original_iid, fontsize=labelsize)
+            colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                              desaturate=desaturate).img
+            pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        # Second row, results with nonparam
+        img = fit_images(iid, rgb)
+        img[0] = [img[0][j] - offsets[j] for j in range(3)]
+        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
+        ax = fig.add_subplot(nbands, 1+2*nid, 1+2*nid+2+i*2)
+        ticksoff(ax)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=False, pedestal=pedestal).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        ax = fig.add_subplot(nbands, 1+2*nid, 1+2*nid+3+i*2)
+        ticksoff(ax)
+        colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        # Third row, nonparam diagnostics
+        img = nonparam_images(iid, rgb)
+        #img[0] = [img[0][j] + scales[j]*2*offsets.mean() for j in range(3)]
+        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+2+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('nonparam %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+3+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('datasub %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+    fig.savefig('plots/nonparamcolimages_%s.pdf'%name)
     pyplot.close('all')
 
 
@@ -306,6 +383,17 @@ def fit_images(f, bands=bands):
         model = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'model_x') for b in bands]
         residual = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'residual_x') for b in bands]
     return [original, model, residual]
+
+def nonparam_images(f, bands=bands):
+    fn = 'fits/%s/fit%s.fits'%(f,f)
+    r = None
+    if os.path.exists(fn):
+        nonparam = [pyfits.getdata(fn, 'nonparam_%s'%b) for b in bands]
+        datasub = [pyfits.getdata(fn, 'datasub_%s'%b) for b in bands]
+    else:
+        nonparam = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'nonparam_x') for b in bands]
+        datasub = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'datasub_x') for b in bands]
+    return [nonparam, datasub]
 
 def fit_func(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
