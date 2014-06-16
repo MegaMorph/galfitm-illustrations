@@ -6,10 +6,10 @@ import subprocess
 import select
 import re
 
-def run_all_fits():
+def run_all_fits(idglob='*'):
     poller = select.poll()
     subprocs = {} # map stdout pipe's file descriptor to the Popen object
-    ids = glob('*/')
+    ids = glob(idglob+'/')
     for id in ids:
         os.chdir(id)
         feedmes = glob('fit*galfit')
@@ -44,4 +44,8 @@ def run_all_fits():
 
 
 if __name__ =='__main__':
-    run_all_fits()
+    if len(sys.argv) > 1:
+        run_all_fits(sys.argv[1])
+    else:
+        run_all_fits()
+
