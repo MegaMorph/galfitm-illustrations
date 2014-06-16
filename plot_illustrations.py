@@ -65,7 +65,7 @@ ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 39.95), 'n': (0.05, 5.95),
 ylim_disk = {'MAG': (20.05, 14.45), 'Re': (15.05, 34.95), 'n': (0.05, 2.95),
              'AR': (0.21, 0.89), 'PA': (35.05, 64.95)}
 
-ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 19.95), 'n': (2.05, 7.95),
+ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 22.95), 'n': (2.05, 7.95),
               'AR': (0.61, 1.09), 'PA': (0.05, 89.95)}
 
 #varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
@@ -89,9 +89,9 @@ def plot_all():
     plot_nonparam()
 
 def plot_standard():
-    plot(('A2', 'A1'), 1, '01', 'True')
-    plot(('Ah2', 'Ah1'), 1, '02', 'True')  # and fit 3
-    plot(('Bh2', 'Bh1'), 1, '03', 'True')  # and fit 3
+    plot(('A2', 'A1', 'A3'), 1, '01', 'True')
+    plot(('Ah2', 'Ah1', 'Ah3'), 1, '02', 'True')
+    plot(('Bh2', 'Bh1', 'Bh3'), 1, '03', 'True')
     plot(('A1e', 'A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
     plot(('Ah1c', 'Ah1'), 1, '04h', 'True')  # add additional wavelength scale
     plot(('A1a', 'A1', 'A1b'), 1, '05', 'True', varlist=('MAG',))
@@ -99,17 +99,17 @@ def plot_standard():
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D2','D1'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))  # and D2 and D3
-    plot(('A5', 'A4'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n')) # and A6
-    plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re')) # and A6
-    plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n')) # and D6
-    plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re')) # and D6
-    plot(('Dh5', 'Dh4'), 1, '10h-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
-    plot(('Dh5', 'Dh4'), 2, '10h-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
-    plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
-    plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
-    plot(('Eh5', 'Eh4'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
-    plot(('Eh5', 'Eh4'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
+    plot(('D2', 'D1', 'D3'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))
+    plot(('A5', 'A4', 'A6'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('A5', 'A4', 'A6'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('D5', 'D4', 'D6'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('D5', 'D4', 'D6'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
+    plot(('Dh5', 'Dh4', 'Dh6'), 1, '10h-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Dh5', 'Dh4', 'Dh6'), 2, '10h-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
+    plot(('E5', 'E4', 'E6'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('E5', 'E4', 'E6'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
+    plot(('Eh5', 'Eh4', 'Eh6'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Eh5', 'Eh4', 'Eh6'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
 
 def plot_nonparam():
     plot(('NA1n', 'NA1'), 1, 'N01', 'True')
@@ -320,8 +320,8 @@ def plotres(res, id, field, func=None, norm=None):
     mec_func = ['DeepSkyBlue' ,'DarkGreen', 'Orange']
     mfc_func = ['DeepSkyBlue', 'white', 'white']
     color = ['DeepSkyBlue', 'DarkGreen', 'Orange']
-    mec_nofunc = ['MediumPurple', 'MediumSeaGreen']
-    mfc_nofunc = ['MediumPurple', 'MediumSeaGreen']
+    mec_nofunc = ['MediumPurple', 'MediumSeaGreen', 'Pink']
+    mfc_nofunc = ['MediumPurple', 'MediumSeaGreen', 'Pink']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:

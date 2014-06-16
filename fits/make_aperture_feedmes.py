@@ -48,7 +48,11 @@ def copy_feedme_with_fixed_structure(fnin, fnout, data, idswitch):
 
 if __name__ =='__main__':
     make_aperture_feedmes('A3', 'A2')
+    make_aperture_feedmes('Ah3', 'Ah2')
+    make_aperture_feedmes('Bh3', 'Bh2')
     make_aperture_feedmes('A6', 'A5')
     make_aperture_feedmes('D3', 'D2')
     make_aperture_feedmes('D6', 'D5')
+    make_aperture_feedmes('Dh6', 'Dh5')
     make_aperture_feedmes('E6', 'E5')
+    make_aperture_feedmes('Eh6', 'Eh5')
