@@ -25,7 +25,7 @@ def combfunc(x, m1, m2):
 def mincombfunc(x, m1, m2, match):
     return ((combfunc(x, m1, m2) - match)**2).sum()
 
-def calc_seds(order=5, colour=False, extremes=False):
+def calc_seds(normmag=16, order=5, colour=False, extremes=False):
     GI = (d.field('GAL_MAG_G') - d.field('GAL_MAG_I'))
     GI10 = scoreatpercentile(GI[(GI < 5) & (GI > -5)], 10)
     GI90 = scoreatpercentile(GI[(GI < 5) & (GI > -5)], 90)
@@ -127,28 +127,44 @@ def calc_seds(order=5, colour=False, extremes=False):
     print
     print '### Figures for models'
     print 'Overall SED:',
-    print galfit_format(offset + 15)
+    print galfit_format(offset + normmag)
     print 'Overall SED (half flux):',
-    print galfit_format(offset + 15 - 2.5*numpy.log10(fcomb))
+    print galfit_format(offset + normmag - 2.5*numpy.log10(fcomb))
     print 'Disk SED (split flux, fraction=%f):'%fcomb,
-    print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
+    print galfit_format(offset_sp + normmag - 2.5*numpy.log10(fcomb))
     print 'Spheroid SED (split flux, fraction=%f):'%(1-fcomb),
-    print galfit_format(offset_el + 15 - 2.5*numpy.log10(fcomb))
+    print galfit_format(offset_el + normmag - 2.5*numpy.log10(fcomb))
     print 'Disk+Spheroid combined SED:',
-    print galfit_format(offset_combined + 15)
+    print galfit_format(offset_combined + normmag)
     print 'Disk+Spheroid combined SED (half flux):',
-    print galfit_format(offset_combined + 15 - 2.5*numpy.log10(fcomb))
+    print galfit_format(offset_combined + normmag - 2.5*numpy.log10(fcomb))
+    print
+    print 'Overall SED &',
+    print latex_format(offset + normmag)
+    print 'Overall SED (half flux) &',
+    print latex_format(offset + normmag - 2.5*numpy.log10(fcomb))
+    print 'Disk SED (split flux, fraction=%f):'%fcomb,
+    print latex_format(offset_sp + normmag - 2.5*numpy.log10(fcomb))
+    print 'Spheroid SED (split flux, fraction=%f):'%(1-fcomb),
+    print latex_format(offset_el + normmag - 2.5*numpy.log10(fcomb))
+    print 'Disk+Spheroid combined SED &',
+    print latex_format(offset_combined + normmag)
+    print 'Disk+Spheroid combined SED (half flux) &',
+    print latex_format(offset_combined + normmag - 2.5*numpy.log10(fcomb))
     print
     print '### Figures for model C'
     for fcomb in numpy.arange(0.1, 0.95, 0.1):
-        print 'Disk SED (split flux, fraction = %f):'%fcomb,
-        print galfit_format(offset_sp + 15 - 2.5*numpy.log10(fcomb))
-        print 'Spheroid SED (split flux, fraction = %f):'%(1-fcomb),
-        print galfit_format(offset_el + 15 - 2.5*numpy.log10(1-fcomb))
+        print 'Disk SED (split flux, fraction = %.2f):'%fcomb,
+        print galfit_format(offset_sp + normmag - 2.5*numpy.log10(fcomb))
+        print 'Spheroid SED (split flux, fraction = %.2f):'%(1-fcomb),
+        print galfit_format(offset_el + normmag - 2.5*numpy.log10(1-fcomb))
     
 
 def galfit_format(x):
-    return repr([round(i, 3) for i in x]).replace(' ', '')
+    return repr(['%.3f'%i for i in x]).replace(' ', '').replace("'", "")
+
+def latex_format(x):
+    return repr(['%.3f'%i for i in x]).replace(',', ' &').replace("'", "")[1:-1]
 
 def mag_size():
     m = d.field('GAL_MAG_R')
@@ -156,7 +172,7 @@ def mag_size():
     n = d.field('GAL_INDEX_R')
     ok = (0 < m) & (m < 30) & (re > 0) & (re < 10) & (n > 0.5) & (n < 6)
     fig = pyplot.figure()
-    pyplot.scatter(m[ok], re[ok], s=1, lw=0)
+    pyplot.scatter(m[ok], re[ok], s=1, lw=0, alpha=0.1)
     fig.savefig('mag_size.pdf')
 
 if __name__ =='__main__':
