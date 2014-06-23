@@ -1,0 +1,5 @@
+3,5c
+A) ../../models/modelD_1u_f0.fits  # Input data image (FITS file)
+B) fitD2u.fits         # Output data image block
+C) ../../models/modelD_1u_f0_sigma.fits  
+.

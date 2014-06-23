@@ -1,0 +1,16 @@
+51c
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
+.
+38c
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
+.
+17a
+U) 1                   # Turn on non-parametric method
+.
+6,7c
+B) fitNB4n.fits         # Output data image block
+C) ../../models/modelNB_1u_f0_sigma.fits,../../models/modelNB_2g_f0_sigma.fits,../../models/modelNB_3r_f0_sigma.fits,../../models/modelNB_4i_f0_sigma.fits,../../models/modelNB_5z_f0_sigma.fits,../../models/modelNB_6Y_f0_sigma.fits,../../models/modelNB_7J_f0_sigma.fits,../../models/modelNB_8H_f0_sigma.fits,../../models/modelNB_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelNB_1u_f0.fits,../../models/modelNB_2g_f0.fits,../../models/modelNB_3r_f0.fits,../../models/modelNB_4i_f0.fits,../../models/modelNB_5z_f0.fits,../../models/modelNB_6Y_f0.fits,../../models/modelNB_7J_f0.fits,../../models/modelNB_8H_f0.fits,../../models/modelNB_9K_f0.fits  # Input data image (FITS file)
+.

@@ -159,24 +159,34 @@ DESCRIPTION
     b = N.where(b>0., b, 0.)
     # compute nonlinear mapping
     radius = beta * (r + g + b)
-    nlfac = N.where(radius>0., N.arcsinh(radius)/radius, 0.)
+    radius_ok = radius > 0.0
+    nlfac = radius * 0.0
+    nlfac[radius_ok] = N.arcsinh(radius[radius_ok])/radius[radius_ok]
     r = r*nlfac
     g = g*nlfac
     b = b*nlfac
-    # desaturate pixels that are dominated by a single colour
-    a = (r+g+b)/3.0
-    rab = r / a / beta
-    gab = g / a / beta
-    bab = b / a / beta
-    mask = N.array((rab, gab, bab))
-    w = N.max(mask, 0)
-    N.putmask(w, w > 1.0, 1.0)
-    w = 1 - w
-    w = N.sqrt(w)
-    # w = 0.0  # or turn this off
-    r = r*w + a*(1-w)
-    g = g*w + a*(1-w)
-    b = b*w + a*(1-w)
+    if args.get('desaturate'):
+        # optionally desaturate pixels that are dominated by a single
+        # colour to avoid colourful speckled sky
+        a = (r+g+b)/3.0
+        N.putmask(a, a == 0.0, 1.0)
+        rab = r / a / beta
+        gab = g / a / beta
+        bab = b / a / beta
+        mask = N.array((rab, gab, bab))
+        w = N.max(mask, 0)
+        N.putmask(w, w > 1.0, 1.0)
+        w = 1 - w
+        w = N.sin(w*N.pi/2.0)
+        r = r*w + a*(1-w)
+        g = g*w + a*(1-w)
+        b = b*w + a*(1-w)
+    # optionally add a grey pedestal
+    if args.has_key('pedestal'):
+        pedestal = args['pedestal']
+        r += pedestal
+        g += pedestal
+        b += pedestal
     return r, g, b
 
 

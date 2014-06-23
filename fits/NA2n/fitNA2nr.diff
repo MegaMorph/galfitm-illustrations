@@ -1,0 +1,8 @@
+15a
+U) 1                   # Turn on non-parametric method
+.
+3,5c
+A) ../../models/modelNA_3r_f0.fits  # Input data image (FITS file)
+B) fitNA2nr.fits         # Output data image block
+C) ../../models/modelNA_3r_f0_sigma.fits  
+.

@@ -1,0 +1,4 @@
+5,6c
+A2) 3.549,3.679,3.795,3.882,3.961,4.013,4.096,4.213,4.343 # Band wavelengths
+B) fitA1c.fits         # Output data image block
+.

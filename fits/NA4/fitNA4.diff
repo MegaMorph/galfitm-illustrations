@@ -1,0 +1,13 @@
+51c
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
+.
+38c
+ 3) 18.0,17.0,16.0,15.0,15.0,15.0,15.0,14.0,14.0  7  bands  #  Integrated magnitude
+.
+6,7c
+B) fitNA4.fits         # Output data image block
+C) ../../models/modelNA_1u_f0_sigma.fits,../../models/modelNA_2g_f0_sigma.fits,../../models/modelNA_3r_f0_sigma.fits,../../models/modelNA_4i_f0_sigma.fits,../../models/modelNA_5z_f0_sigma.fits,../../models/modelNA_6Y_f0_sigma.fits,../../models/modelNA_7J_f0_sigma.fits,../../models/modelNA_8H_f0_sigma.fits,../../models/modelNA_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelNA_1u_f0.fits,../../models/modelNA_2g_f0.fits,../../models/modelNA_3r_f0.fits,../../models/modelNA_4i_f0.fits,../../models/modelNA_5z_f0.fits,../../models/modelNA_6Y_f0.fits,../../models/modelNA_7J_f0.fits,../../models/modelNA_8H_f0.fits,../../models/modelNA_9K_f0.fits  # Input data image (FITS file)
+.

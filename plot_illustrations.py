@@ -16,7 +16,12 @@ from scipy.integrate import quad
 from scipy.interpolate import interp1d
 from RGBImage import *
 
-matplotlib.rcParams.update({'font.size': 16})
+matplotlib.rcParams.update({'font.size': 16,
+                            'font.family': 'serif',
+                            'font.serif': 'times',
+                            'text.usetex': True})
+
+labelsize = 12
 
 rescolmap = matplotlib.colors.LinearSegmentedColormap.from_list('rescol', ('blue', 'black', 'white', 'red'), N=256, gamma=1.0)
 
@@ -60,7 +65,7 @@ ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 39.95), 'n': (0.05, 5.95),
 ylim_disk = {'MAG': (20.05, 14.45), 'Re': (15.05, 34.95), 'n': (0.05, 2.95),
              'AR': (0.21, 0.89), 'PA': (35.05, 64.95)}
 
-ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 19.95), 'n': (2.05, 7.95),
+ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 22.95), 'n': (2.05, 7.95),
               'AR': (0.61, 1.09), 'PA': (0.05, 89.95)}
 
 #varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
@@ -80,9 +85,13 @@ def poster_plots():
 
 
 def plot_all():
-    plot(('A2', 'A1'), 1, '01', 'True')
-    plot(('Ah2', 'Ah1'), 1, '02', 'True')  # and fit 3
-    plot(('Bh2', 'Bh1'), 1, '03', 'True')  # and fit 3
+    plot_standard()
+    plot_nonparam()
+
+def plot_standard():
+    plot(('A2', 'A1', 'A3'), 1, '01', 'True')
+    plot(('Ah2', 'Ah1', 'Ah3'), 1, '02', 'True')
+    plot(('Bh2', 'Bh1', 'Bh3'), 1, '03', 'True')
     plot(('A1e', 'A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
     plot(('Ah1c', 'Ah1'), 1, '04h', 'True')  # add additional wavelength scale
     plot(('A1a', 'A1', 'A1b'), 1, '05', 'True', varlist=('MAG',))
@@ -90,21 +99,28 @@ def plot_all():
     # plot(('A1', 'A1c', 'A1d'), 1, '06', 'True')
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
-    plot(('D2','D1'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))  # and D2 and D3
-    plot(('A5', 'A4'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n')) # and A6
-    plot(('A5', 'A4'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re')) # and A6
-    plot(('D5', 'D4'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n')) # and D6
-    plot(('D5', 'D4'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re')) # and D6
-    plot(('Dh5', 'Dh4'), 1, '10h-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
-    plot(('Dh5', 'Dh4'), 2, '10h-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
-    plot(('E5', 'E4'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
-    plot(('E5', 'E4'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
-    plot(('Eh5', 'Eh4'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n')) # and E6
-    plot(('Eh5', 'Eh4'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re')) # and E6
+    plot(('D2', 'D1', 'D3'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))
+    plot(('A5', 'A4', 'A6'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('A5', 'A4', 'A6'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('D5', 'D4', 'D6'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('D5', 'D4', 'D6'), 2, '10-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
+    plot(('Dh5', 'Dh4', 'Dh6'), 1, '10h-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Dh5', 'Dh4', 'Dh6'), 2, '10h-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
+    plot(('E5', 'E4', 'E6'), 1, '11-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('E5', 'E4', 'E6'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
+    plot(('Eh5', 'Eh4', 'Eh6'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Eh5', 'Eh4', 'Eh6'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
+
+def plot_nonparam():
     plot(('NA1n', 'NA1'), 1, 'N01', 'True')
     plot(('NA2n', 'NA2'), 1, 'N02', 'True')
     plot(('NA4n', 'NA4'), 1, 'N03-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
     plot(('NA4n', 'NA4'), 2, 'N03-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('NB4n', 'NB4'), 1, 'N04-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('NB4n', 'NB4'), 2, 'N04-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+    plot(('NC4n', 'NC4', 'NC4m'), 1, 'N05-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('NC4n', 'NC4', 'NC4m'), 2, 'N05-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
+
 
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
          varlist=varlist_std, ylim=ylim_std, sim=sim_std):
@@ -120,20 +136,24 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     for i, v in enumerate(varlist):
         ax = make_bands_plot(fig, (5, 1, i+1), labels[v], i==0, i==nvar-1)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], '-k')
+            pyplot.plot(w, sim[v], '-k', alpha=0.75)
         plotres(res, id, 'COMP%i_%s'%(compno, v), func)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], 'xk', markersize=10.0)
+            pyplot.plot(w, sim[v], 'xk', markersize=10.0, alpha=0.75)
         pyplot.ylim(ylim[v])
         if i==0:
             pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
-    fig.savefig('illustration_%s.pdf'%name)
+    fig.savefig('plots/illustration_%s.pdf'%name)
     pyplot.close('all')
     if compno==1:
         plotimg(id, name)
         plotcolimg(id, name)
         plotprof(id, name)
         plotcolprof(id, name)
+        npid = [j for j in id if j[0] == 'N' and j[-1] in 'nm']
+        if len(npid) > 0:
+            plotnonparamcolimg(npid, name)
+
 
 def plotimg(id, name='0'):
     cmap_img = pyplot.cm.gray
@@ -152,59 +172,136 @@ def plotimg(id, name='0'):
             for ib, b in enumerate(bands):
                 ax = fig.add_subplot(nbands, 1+2*len(id), 1+ib*(1+nid*2)+i*2)
                 if ib==nbands-1:
-                    ax.set_xlabel('image')
+                    ax.set_xlabel('image', fontsize=labelsize)
                 ticksoff(ax)
                 vmin.append(scoreatpercentile(img[0][ib].ravel(), 0.1))
                 vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9))
                 vrange.append(scoreatpercentile(img[2][ib].ravel(), 99.9) - scoreatpercentile(img[2][ib].ravel(), 0.1))
                 pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
-                ax.set_ylabel('$%s$'%b)
+                ax.set_ylabel('$%s$'%b, fontsize=labelsize)
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 2+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
-                ax.set_xlabel('model %s'%iid)
+                ax.set_xlabel('model %s'%iid, fontsize=labelsize)
             ticksoff(ax)
             pyplot.imshow(img[1][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
         for ib, b in enumerate(bands):
             ax = fig.add_subplot(nbands, 1+2*len(id), 3+ib*(1+nid*2)+i*2)
             if ib==nbands-1:
-                ax.set_xlabel('residual %s'%iid)
+                ax.set_xlabel('residual %s'%iid, fontsize=labelsize)
             ticksoff(ax)
             pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, norm=norm_res, vmin=-vrange[ib], vmax=vrange[ib], interpolation='nearest')
-    fig.savefig('images_%s.pdf'%name)
+    fig.savefig('plots/images_%s.pdf'%name)
     pyplot.close('all')
 
 
-def plotcolimg(id, name='0', rgb='Hzg'):
+def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
     nbands = len(bands)
     nid = len(id)
     beta = 2.5
     scales = numpy.array((0.04, 0.055, 0.2))
-    offsets = numpy.array([75.0, 40.0, 8.0])
+    # offsets not so necessary now have nice desaturation feature working
+    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.5
     fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
         img = fit_images(iid, rgb)
         img[0] = [img[0][j] - offsets[j] for j in range(3)]
         img[1] = [img[1][j] - offsets[j] for j in range(3)]
-        img[2] = [img[2][j] + 2*offsets[j] for j in range(3)]
+        img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
         if i == 0:
             ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
             ticksoff(ax)
-            ax.set_xlabel('image')
-            colimg = RGBImage(*img[0], scales=scales, beta=beta).img
+            ax.set_xlabel('image', fontsize=labelsize)
+            colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                              desaturate=desaturate, pedestal=pedestal).img
             pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
         ticksoff(ax)
-        ax.set_xlabel('model %s'%iid)
-        colimg = RGBImage(*img[1], scales=scales, beta=beta).img
+        ax.set_xlabel('model %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=False, pedestal=pedestal).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
         ticksoff(ax)
-        ax.set_xlabel('residual %s'%iid)
-        colimg = RGBImage(*img[2], scales=scales, beta=beta).img
+        ax.set_xlabel('residual %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                          desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
-    fig.savefig('colimages_%s.pdf'%name)
+    fig.savefig('plots/colimages_%s.pdf'%name)
+    pyplot.close('all')
+
+
+def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
+    nbands = len(bands)
+    nid = len(id)
+    beta = 2.5
+    scales = numpy.array((0.04, 0.055, 0.2))
+    # offsets not so necessary now have nice desaturation feature working
+    offsets = numpy.array([75.0, 40.0, 8.0]) * 0.5
+    fig = pyplot.figure(figsize=(15.0/nbands * (1+nid*2), 15))
+    fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
+    original_iid = None
+    for i, iid in enumerate(id):
+        # First row, results without nonparam
+        if original_iid != iid[:-1]:
+            original_iid = iid[:-1]
+            print original_iid
+            img = fit_images(original_iid, rgb)
+            img[0] = [img[0][j] - offsets[j] for j in range(3)]
+            img[1] = [img[1][j] - offsets[j] for j in range(3)]
+            img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
+            if i == 0:
+                ax = fig.add_subplot(nbands, 1+2*nid, 1+i*2)
+                ticksoff(ax)
+                ax.set_title('image', fontsize=labelsize)
+                colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                                  desaturate=desaturate, pedestal=pedestal).img
+                pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+            ax = fig.add_subplot(nbands, 1+2*nid, 2+i*2)
+            ticksoff(ax)
+            ax.set_title('model %s'%original_iid, fontsize=labelsize)
+            colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                              desaturate=desaturate, pedestal=pedestal).img
+            pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+            ax = fig.add_subplot(nbands, 1+2*nid, 3+i*2)
+            ticksoff(ax)
+            ax.set_title('residual %s'%original_iid, fontsize=labelsize)
+            colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                              desaturate=desaturate).img
+            pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        # Second row, results with nonparam
+        img = fit_images(iid, rgb)
+        img[0] = [img[0][j] - offsets[j] for j in range(3)]
+        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        img[2] = [img[2][j] + scales[j]*2*offsets.mean() for j in range(3)]
+        ax = fig.add_subplot(nbands, 1+2*nid, 1+2*nid+2+i*2)
+        ticksoff(ax)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=False, pedestal=pedestal).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        ax = fig.add_subplot(nbands, 1+2*nid, 1+2*nid+3+i*2)
+        ticksoff(ax)
+        colimg = RGBImage(*img[2], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        # Third row, nonparam diagnostics
+        img = nonparam_images(iid, rgb)
+        #img[0] = [img[0][j] + scales[j]*2*offsets.mean() for j in range(3)]
+        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+2+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('nonparam %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[0], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+        ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+3+i*2)
+        ticksoff(ax)
+        ax.set_xlabel('datasub %s'%iid, fontsize=labelsize)
+        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+                          desaturate=desaturate).img
+        pyplot.imshow(colimg, interpolation='nearest', origin='lower')
+    fig.savefig('plots/nonparamcolimages_%s.pdf'%name)
     pyplot.close('all')
 
 
@@ -223,8 +320,8 @@ def plotres(res, id, field, func=None, norm=None):
     mec_func = ['DeepSkyBlue' ,'DarkGreen', 'Orange']
     mfc_func = ['DeepSkyBlue', 'white', 'white']
     color = ['DeepSkyBlue', 'DarkGreen', 'Orange']
-    mec_nofunc = ['MediumPurple', 'MediumSeaGreen']
-    mfc_nofunc = ['MediumPurple', 'MediumSeaGreen']
+    mec_nofunc = ['MediumPurple', 'MediumSeaGreen', 'Pink']
+    mfc_nofunc = ['MediumPurple', 'MediumSeaGreen', 'Pink']
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:
@@ -262,7 +359,7 @@ def plotfunc(func, wlfunc=None, color='red', label=''):
     else:
         xfunc = wlfunc(x)
     y = func(xfunc)
-    return pyplot.plot(x, y, '-', color=color, label=label)
+    return pyplot.plot(x, y, '-', color=color, label=label, alpha=0.5)
 
 def fit_results(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
@@ -287,6 +384,17 @@ def fit_images(f, bands=bands):
         residual = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'residual_x') for b in bands]
     return [original, model, residual]
 
+def nonparam_images(f, bands=bands):
+    fn = 'fits/%s/fit%s.fits'%(f,f)
+    r = None
+    if os.path.exists(fn):
+        nonparam = [pyfits.getdata(fn, 'nonparam_%s'%b) for b in bands]
+        datasub = [pyfits.getdata(fn, 'datasub_%s'%b) for b in bands]
+    else:
+        nonparam = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'nonparam_x') for b in bands]
+        datasub = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'datasub_x') for b in bands]
+    return [nonparam, datasub]
+
 def fit_func(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
     if os.path.exists(fn):
@@ -309,7 +417,7 @@ def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
     ax1.set_ylabel(ylabel)
     ax1.set_xlim(xlim)
     if top:
-        ax2.set_xlabel('wavelength, $\AA$')
+        ax2.set_xlabel('wavelength, \AA')
     else:
         ax2.set_xticklabels([])
     ax2.set_xlim(xlim)
@@ -383,7 +491,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
         for j in range(len(func[i])):
             for k, band in enumerate(bands):
                 if k == 0:
-                    label = "%s_%i"%(iid, j)
+                    label = "%s\_%i"%(iid, j)
                 else:
                     label = ""
                 pyplot.plot(r, func[i][j][k](r), linestyle=linestyle[i],
@@ -394,7 +502,7 @@ def plotprof(id=('A1', 'A2'), name='0'):
     #fig.gca().invert_yaxis()
     pyplot.xlim(0.0, rmax)
     pyplot.ylim(26, 16)
-    fig.savefig('profiles_%s.pdf'%name)
+    fig.savefig('plots/profiles_%s.pdf'%name)
 
 
 def plotcolprof(id=('A1', 'A2'), name='0'):
@@ -438,7 +546,7 @@ def plotcolprof(id=('A1', 'A2'), name='0'):
     pyplot.ylabel('Colour')
     pyplot.ylim(-1*offset, (len(bands)+1) * offset)
     pyplot.xlim(0.0, rmax)
-    fig.savefig('colprofiles_%s.pdf'%name)
+    fig.savefig('plots/colprofiles_%s.pdf'%name)
 
 
 def make_funcs(id):

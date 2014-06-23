@@ -1,0 +1,15 @@
+57c
+ 9) 0.8         0          #  Axis ratio (b/a)  
+.
+51c
+ 3) 16.999,16.127,15.753,15.529,15.389,15.41,15.384,15.192,15.281  0   #  Integrated magnitude
+.
+44c
+ 9) 0.9         0          #  Axis ratio (b/a)  
+.
+38c
+ 3) 18.546,17.519,15.753,15.084,14.764,14.623,14.433,14.02,13.78  0   #  Integrated magnitude
+.
+6c
+B) modelE.fits         # Output data image block
+.

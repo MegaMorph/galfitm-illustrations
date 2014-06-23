@@ -1,0 +1,10 @@
+38,40c
+ 3) 15.0        1          #  Integrated magnitude
+ 4) 7.0         1          #  R_e (effective radius)   [pix]
+ 5) 2.0         1          #  Sersic index n (de Vaucouleurs n=4) 
+.
+3,7c
+A) ../../models/modelCf_3r_f0.fits  # Input data image (FITS file)
+B) fitCf1.fits         # Output data image block
+C) ../../models/modelCf_3r_f0_sigma.fits  
+.

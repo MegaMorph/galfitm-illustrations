@@ -1,0 +1,5 @@
+3,5c
+A) ../../models/modelNA_6Y_f0.fits  # Input data image (FITS file)
+B) fitNA2Y.fits         # Output data image block
+C) ../../models/modelNA_6Y_f0_sigma.fits  
+.

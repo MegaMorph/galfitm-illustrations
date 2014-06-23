@@ -4,11 +4,12 @@ from glob import glob
 import os, sys
 import subprocess
 import select
+import re
 
-def run_all_fits():
+def run_all_fits(idglob='*'):
     poller = select.poll()
     subprocs = {} # map stdout pipe's file descriptor to the Popen object
-    ids = glob('*/')
+    ids = glob(idglob+'/')
     for id in ids:
         os.chdir(id)
         feedmes = glob('fit*galfit')
@@ -22,18 +23,6 @@ def run_all_fits():
             poller.register(subproc.stdout, select.POLLHUP)
         # do proper fits
         for f in feedmes:
-            ## code to convert feedmes to use sigma image
-            # text = file(f).readlines()
-            # fout = file(f, 'w')
-            # for l in text:
-            #     ls = l.split()
-            #     if len(ls) > 0 and ls[0] == 'A)':
-            #         cline = l[:l.find('#')].replace('A)', 'C)').replace('.fits', '_sigma.fits')
-            #     if len(ls) > 0 and ls[0] == 'C)':
-            #         fout.write(cline+'\n')
-            #     else:
-            #         fout.write(l)
-            # fout.close()
             cmd = 'nice galfit %s > %s.out; if [ $? -eq 0 ]; then echo %s: success; else echo %s: failure; fi'%(f,f,f,f)
             subproc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             subprocs[subproc.stdout.fileno()] = subproc
@@ -53,5 +42,10 @@ def run_all_fits():
             print '\r\033[KAll complete'
             break
 
+
 if __name__ =='__main__':
-    run_all_fits()
+    if len(sys.argv) > 1:
+        run_all_fits(sys.argv[1])
+    else:
+        run_all_fits()
+
