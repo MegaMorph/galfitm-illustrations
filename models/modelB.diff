@@ -1,8 +1,8 @@
 52c
- 4) 24.0,-8.0   0  cheb    #  R_e (effective radius)   [pix]
+ 4) 18.0,-6.0   0  cheb    #  R_e (effective radius)   [pix]
 .
 39c
- 4) 12.0,-4.0   0  cheb    #  R_e (effective radius)   [pix]
+ 4) 6.0,-2.0   0  cheb    #  R_e (effective radius)   [pix]
 .
 6c
 B) modelB.fits         # Output data image block
