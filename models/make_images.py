@@ -56,11 +56,12 @@ exp_flat = numpy.array([1]*9)
 
 # Sizes of GAMA galaxies
 # At r ~ 17, Re ~ 3 arcsec ~ 9 pixels
+# At r ~ 16, Re ~ 4 arcsec ~ 12 pixels
 # At r ~ 15, Re ~ 6 arcsec ~ 18 pixels
 
-# Keep r ~ 15, and set Re_bulge = 12 pixels, Re_disk = 24 pixels.
+# Use r ~ 16, and set Re_bulge = 6 pixels, Re_disk = 18 pixels.
 
-fade = 1.0  # fade to r~16
+fade = 0.0  # all models normalised to r=16
 
 def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
     if noisetype == 'realistic':
