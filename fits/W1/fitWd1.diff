@@ -1,0 +1,7 @@
+6,7c
+B) fitWd1.fits         # Output data image block
+C) ../../models/modelWd_1u_f0_sigma.fits,../../models/modelWd_2g_f0_sigma.fits,../../models/modelWd_3r_f0_sigma.fits,../../models/modelWd_4i_f0_sigma.fits,../../models/modelWd_5z_f0_sigma.fits,../../models/modelWd_6Y_f0_sigma.fits,../../models/modelWd_7J_f0_sigma.fits,../../models/modelWd_8H_f0_sigma.fits,../../models/modelWd_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelWd_1u_f0.fits,../../models/modelWd_2g_f0.fits,../../models/modelWd_3r_f0.fits,../../models/modelWd_4i_f0.fits,../../models/modelWd_5z_f0.fits,../../models/modelWd_6Y_f0.fits,../../models/modelWd_7J_f0.fits,../../models/modelWd_8H_f0.fits,../../models/modelWd_9K_f0.fits  # Input data image (FITS file)
+.

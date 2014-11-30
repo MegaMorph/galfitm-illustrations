@@ -118,3 +118,5 @@ if __name__ =='__main__':
     make_images('NB', 2)
     make_images('NC', 0)
     make_images('NC', 2)
+    for x in 'abcdefghi':
+        make_images('W'+x, 0)

@@ -1,0 +1,9 @@
+58c
+10) 25.0        0          #  Position angle (PA) [deg: Up=0, Left=90]
+.
+45c
+10) 25.0        0          #  Position angle (PA) [deg: Up=0, Left=90]
+.
+6c
+B) modelWa.fits         # Output data image block
+.
