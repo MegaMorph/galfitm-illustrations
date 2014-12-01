@@ -1,3 +1,6 @@
+45c
+10) 60.0        1          #  Position angle (PA) [deg: Up=0, Left=90]
+.
 6,7c
 B) fitWf1.fits         # Output data image block
 C) ../../models/modelWf_1u_f0_sigma.fits,../../models/modelWf_2g_f0_sigma.fits,../../models/modelWf_3r_f0_sigma.fits,../../models/modelWf_4i_f0_sigma.fits,../../models/modelWf_5z_f0_sigma.fits,../../models/modelWf_6Y_f0_sigma.fits,../../models/modelWf_7J_f0_sigma.fits,../../models/modelWf_8H_f0_sigma.fits,../../models/modelWf_9K_f0_sigma.fits  
