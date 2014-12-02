@@ -1,5 +1,5 @@
 45c
-10) 60.0        1          #  Position angle (PA) [deg: Up=0, Left=90]
+10) 60.0        3          #  Position angle (PA) [deg: Up=0, Left=90]
 .
 6,7c
 B) fitWa1.fits         # Output data image block
