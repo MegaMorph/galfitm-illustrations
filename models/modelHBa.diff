@@ -1,0 +1,5 @@
+45a
+B1) 0.20        1          # Bending mode 1 (shear)
+B2) 0.20        1          # Bending mode 2 (banana shape)
+B3) 0.20        1          # Bending mode 3 (S-shape)
+.
