@@ -1,0 +1,10 @@
+45a
+C0) 0.05        1	   #  boxiness
+.
+6,7c
+B) fitHCa1.fits         # Output data image block
+C) ../../models/modelHCa_1u_f0_sigma.fits,../../models/modelHCa_2g_f0_sigma.fits,../../models/modelHCa_3r_f0_sigma.fits,../../models/modelHCa_4i_f0_sigma.fits,../../models/modelHCa_5z_f0_sigma.fits,../../models/modelHCa_6Y_f0_sigma.fits,../../models/modelHCa_7J_f0_sigma.fits,../../models/modelHCa_8H_f0_sigma.fits,../../models/modelHCa_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelHCa_1u_f0.fits,../../models/modelHCa_2g_f0.fits,../../models/modelHCa_3r_f0.fits,../../models/modelHCa_4i_f0.fits,../../models/modelHCa_5z_f0.fits,../../models/modelHCa_6Y_f0.fits,../../models/modelHCa_7J_f0.fits,../../models/modelHCa_8H_f0.fits,../../models/modelHCa_9K_f0.fits  # Input data image (FITS file)
+.

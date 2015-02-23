@@ -1,0 +1,12 @@
+45a
+B1) 0.05        1          # Bending mode 1 (shear)
+B2) 0.05        1          # Bending mode 2 (banana shape)
+B3) 0.05        1          # Bending mode 3 (S-shape)
+.
+6,7c
+B) fitHBc1.fits         # Output data image block
+C) ../../models/modelHBc_1u_f0_sigma.fits,../../models/modelHBc_2g_f0_sigma.fits,../../models/modelHBc_3r_f0_sigma.fits,../../models/modelHBc_4i_f0_sigma.fits,../../models/modelHBc_5z_f0_sigma.fits,../../models/modelHBc_6Y_f0_sigma.fits,../../models/modelHBc_7J_f0_sigma.fits,../../models/modelHBc_8H_f0_sigma.fits,../../models/modelHBc_9K_f0_sigma.fits  
+.
+3c
+A) ../../models/modelHBc_1u_f0.fits,../../models/modelHBc_2g_f0.fits,../../models/modelHBc_3r_f0.fits,../../models/modelHBc_4i_f0.fits,../../models/modelHBc_5z_f0.fits,../../models/modelHBc_6Y_f0.fits,../../models/modelHBc_7J_f0.fits,../../models/modelHBc_8H_f0.fits,../../models/modelHBc_9K_f0.fits  # Input data image (FITS file)
+.
