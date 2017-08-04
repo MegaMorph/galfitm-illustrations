@@ -1,6 +1,6 @@
 fit.log
 *.fits
-galfit.*
+*.galfit.*
 *.out
 fit[^A]*.galfit
 fit???*.galfit
