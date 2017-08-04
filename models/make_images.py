@@ -37,7 +37,7 @@ exptime_las = numpy.array([20.0, 10.0, 10.0, 10.0])  # seconds
 exp_las = numpy.array([2, 4, 4, 4])  # J actually 2 x 4 microsteps, but this seems to match
 gain_las = numpy.array([4.5, 4.5, 4.5, 4.5])  # count / e-
 readnoise_las = numpy.array([25.0]*4)
-sky_las = numpy.array([22, 122, 760, 712])  # counts/pixel/sec
+sky_las = numpy.array([22, 122, 760, 712], dtype=numpy.float)  # counts/pixel/sec
 AB_Vega = numpy.array([0.634, 0.938, 1.379, 1.900])
 
 zp_las += 2.5*numpy.log10(exptime_las*gain_las) + AB_Vega # AB magnitude corresponding to 1 electron in final image
