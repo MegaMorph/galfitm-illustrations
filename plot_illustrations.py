@@ -132,7 +132,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         func = None
     nvar = len(varlist)
     fig = pyplot.figure(figsize=(5, 15))
-    fig.subplots_adjust(bottom=0.05, top=0.94, left=0.2, right=0.95, hspace=0.075)
+    fig.subplots_adjust(bottom=0.1, top=0.94, left=0.2, right=0.95, hspace=0.075)
     for i, v in enumerate(varlist):
         if v == 'MAGNOSUB':
             v = 'MAG'
@@ -159,7 +159,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         if i == nvar-1:
             #pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
             pyplot.legend(loc='upper left', numpoints=1, prop={'size': 16},
-                          bbox_to_anchor=(0., -.3, 1., .1),
+                          bbox_to_anchor=(0., -.35, 1., .1),
                           ncol=4, mode="expand", borderaxespad=0.)
     fig.savefig('plots/illustration_%s.pdf'%name)
     pyplot.close('all')
