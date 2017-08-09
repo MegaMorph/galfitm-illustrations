@@ -38,34 +38,34 @@ xlim = (2000, 23000)
 
 sim_std = {'MAG': 1.0 + numpy.array([16.935,15.964,15.0,14.562,14.267,14.183,13.992,13.672,13.547])}
 sim_A_disk = {'MAG': 1.0 + numpy.array([17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299]),
-              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([18.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.4]*9), 'PA': numpy.array([45.0]*9)}
 sim_A_bulge = {'MAG': 1.0 + numpy.array([17.687,16.717,15.753,15.315,15.019,14.936,14.745,14.425,14.299]),
-              'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
+              'Re': numpy.array([6.0]*9), 'n': numpy.array([4.0]*9),
               'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_D_disk = {'MAG': 1.0 + numpy.array([17.328,16.509,15.753,15.374,15.112,15.056,14.882,14.597,14.5]),
-              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([18.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.4]*9), 'PA': numpy.array([45.0]*9)}
 sim_D_bulge = {'MAG': 1.0 + numpy.array([18.229,16.974,15.753,15.258,14.934,14.827,14.623,14.276,14.13]),
-               'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
+               'Re': numpy.array([6.0]*9), 'n': numpy.array([4.0]*9),
                'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_E_disk = {'MAG': 1.0 + numpy.array([16.999,16.127,15.753,15.529,15.389,15.41,15.384,15.192,15.281]),
-              'Re': numpy.array([24.0]*9), 'n': numpy.array([1.0]*9),
+              'Re': numpy.array([18.0]*9), 'n': numpy.array([1.0]*9),
               'AR': numpy.array([0.8]*9), 'PA': numpy.array([45.0]*9)}
 sim_E_bulge = {'MAG': 1.0 + numpy.array([18.546,17.519,15.753,15.084,14.764,14.623,14.433,14.02,13.78]),
-               'Re': numpy.array([12.0]*9), 'n': numpy.array([4.0]*9),
+               'Re': numpy.array([6.0]*9), 'n': numpy.array([4.0]*9),
                'AR': numpy.array([0.9]*9), 'PA': numpy.array([45.0]*9)}
 
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
-linestyle = [':', '-', '.-', '.-.']
+linestyle = [':', '-', '-.', (0, '.-.')]
 
-ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 39.95), 'n': (0.05, 5.95),
+ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 29.95), 'n': (0.05, 5.95),
             'AR': (0.41, 0.79), 'PA': (35.05, 64.95)}
 
-ylim_disk = {'MAG': (20.05, 14.45), 'Re': (15.05, 34.95), 'n': (0.05, 2.95),
+ylim_disk = {'MAG': (20.05, 14.45), 'Re': (10.05, 24.95), 'n': (0.05, 2.95),
              'AR': (0.21, 0.89), 'PA': (35.05, 64.95)}
 
-ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (5.05, 22.95), 'n': (2.05, 7.95),
+ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (0.05, 12.95), 'n': (2.05, 7.95),
               'AR': (0.61, 1.09), 'PA': (0.05, 89.95)}
 
 #varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
@@ -89,7 +89,7 @@ def plot_all():
     plot_nonparam()
 
 def plot_standard():
-    plot(('A2', 'A1', 'A3'), 1, '01', 'True')
+    plot(('A2', 'A1', 'A3'), 1, '01', 'True', varlist=('MAGNOSUB', 'MAG', 'Re', 'n'))
     plot(('Ah2', 'Ah1', 'Ah3'), 1, '02', 'True')
     plot(('Bh2', 'Bh1', 'Bh3'), 1, '03', 'True')
     plot(('A1e', 'A1c', 'A1'), 1, '04', 'True')  # add additional wavelength scale
@@ -123,7 +123,7 @@ def plot_nonparam():
 
 
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
-         varlist=varlist_std, ylim=ylim_std, sim=sim_std):
+         varlist=varlist_std, ylim=ylim_std, sim=sim_std, submag=True):
     print name, ':', id
     res = [fit_results(i) for i in id]
     if show_func:
@@ -134,15 +134,33 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
     fig = pyplot.figure(figsize=(5, 15))
     fig.subplots_adjust(bottom=0.05, top=0.94, left=0.2, right=0.95, hspace=0.075)
     for i, v in enumerate(varlist):
+        if v == 'MAGNOSUB':
+            v = 'MAG'
+            vsubmag = False
+        else:
+            vsubmag = submag
         ax = make_bands_plot(fig, (5, 1, i+1), labels[v], i==0, i==nvar-1)
+        sub = norm = None
         if v in sim.keys():
-            pyplot.plot(w, sim[v], '-k', alpha=0.75)
-        plotres(res, id, 'COMP%i_%s'%(compno, v), func)
+            sv = sim[v]
+            if vsubmag and v == 'MAG':
+                sub = interp1d(w, sim[v], 'cubic', bounds_error=False)
+            if sub is not None:
+                sv = sim[v] - sub(w)
+                ax.set_ylabel('$\Delta ' + labels[v][1:])
+            pyplot.plot(w, sv, '-k', alpha=0.75)
+        plotres(res, id, 'COMP%i_%s'%(compno, v), func, sub=sub, norm=norm)
         if v in sim.keys():
-            pyplot.plot(w, sim[v], 'xk', markersize=10.0, alpha=0.75)
-        pyplot.ylim(ylim[v])
-        if i==0:
-            pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
+            pyplot.plot(w, sv, 'xk', markersize=10.0, alpha=0.75)
+        if sub is None:
+            pyplot.ylim(ylim[v])
+        else:
+            pyplot.ylim(numpy.subtract(ylim[v], numpy.mean(ylim[v], 0))/3.0)
+        if i == nvar-1:
+            #pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
+            pyplot.legend(loc='upper left', numpoints=1, prop={'size': 16},
+                          bbox_to_anchor=(0., -.3, 1., .1),
+                          ncol=4, mode="expand", borderaxespad=0.)
     fig.savefig('plots/illustration_%s.pdf'%name)
     pyplot.close('all')
     if compno==1:
@@ -286,19 +304,21 @@ def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         # Third row, nonparam diagnostics
-        img = nonparam_images(iid, rgb)
-        #img[0] = [img[0][j] + scales[j]*2*offsets.mean() for j in range(3)]
-        img[1] = [img[1][j] - offsets[j] for j in range(3)]
+        nonparam = nonparam_images(iid, rgb)
+        print(len(nonparam))
+        datasub = [img[0][j] - nonparam[j] for j in range(3)]
+        nonparam = [nonparam[j] - offsets[j] for j in range(3)]
+        datasub = [datasub[j] - offsets[j] for j in range(3)]
         ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+2+i*2)
         ticksoff(ax)
         ax.set_xlabel('nonparam %s'%iid, fontsize=labelsize)
-        colimg = RGBImage(*img[0], scales=scales, beta=beta,
+        colimg = RGBImage(*nonparam, scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         ax = fig.add_subplot(nbands, 1+2*nid, 2+4*nid+3+i*2)
         ticksoff(ax)
         ax.set_xlabel('datasub %s'%iid, fontsize=labelsize)
-        colimg = RGBImage(*img[1], scales=scales, beta=beta,
+        colimg = RGBImage(*datasub, scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
     fig.savefig('plots/nonparamcolimages_%s.pdf'%name)
@@ -312,7 +332,7 @@ def ticksoff(ax):
     ax.set_yticks([])
 
 
-def plotres(res, id, field, func=None, norm=None):
+def plotres(res, id, field, func=None, sub=None, norm=None):
     nid = len(id)
     #mec = ['black', None] * (1+nid//2)
     #mfc = ['white', 'black'] * (1+nid//2)
@@ -325,33 +345,39 @@ def plotres(res, id, field, func=None, norm=None):
     ymin, ymax = (1e99, -1e99)
     for i, iid in enumerate(id):
         if nid%2 == 0:
-            x = w + 100 * (1+i//2) * (-1)**i
+            x = w + 150 * [-1, 1, -2, 2][i]
         else:
-            x = w + 100 * (1+i//2) * (-1)**i            
+            x = w + 300 * [-1, 0, 1, -2, 2][i]
         if func is not None and func[i] is not None:
             mec = mec_func
             mfc = mfc_func
             f = func[i][field]
-            if norm is not None:
-                f /= norm[i][field]
-            plotfunc(f, wlfunc=wlfuncs.get(iid), color=color[i])
+            plotfunc(f, wlfunc=wlfuncs.get(iid), color=color[i],
+                     sub=sub, norm=norm)
         else:
             mec = mec_nofunc
             mfc = mfc_nofunc
         r = res[i][field]
+        rerr = res[i][field+'_ERR']
+        if sub is not None:
+            r = r - sub(w)
         if norm is not None:
-            r /= norm[i][field](x)
-        pyplot.errorbar(x, r, res[i][field+'_ERR'], color=mec[i],
-                        marker=marker[i//2], mec=mec[i], markerfacecolor=mfc[i], linestyle='',
-                        label=iid)
-        ymin = min(ymin, (res[i][field]-res[i][field+'_ERR']).min())
-        ymax = max(ymax, (res[i][field]+res[i][field+'_ERR']).max())
+            r = r / norm(w)
+            rerr = rerr / norm(w)
+        #alpha = 1 - i * 0.2
+        alpha = 1
+        pyplot.errorbar(x, r, rerr, color=mec[i],
+                        marker=marker[i//2], mec=mec[i],
+                        markerfacecolor=mfc[i], linestyle='',
+                        label=iid, alpha=alpha)
+        ymin = min(ymin, (r-rerr).min())
+        ymax = max(ymax, (r+rerr).max())
     yrange = ymax - ymin
     ymin -= 0.05 * yrange
     ymax += 0.05 * yrange
     pyplot.ylim(ymin, ymax)
 
-def plotfunc(func, wlfunc=None, color='red', label=''):
+def plotfunc(func, wlfunc=None, color='red', label='', sub=None, norm=None):
     dx = (xlim[1] - xlim[0]) / 1000.0
     x = numpy.arange(xlim[0], xlim[1]+dx/2.0, dx)
     if wlfunc is None:
@@ -359,7 +385,11 @@ def plotfunc(func, wlfunc=None, color='red', label=''):
     else:
         xfunc = wlfunc(x)
     y = func(xfunc)
-    return pyplot.plot(x, y, '-', color=color, label=label, alpha=0.5)
+    if sub is not None:
+        y = y - sub(x)
+    if norm is not None:
+        y = y / norm(x)
+    return pyplot.plot(x, y, ':', color=color, label=label, alpha=0.5)
 
 def fit_results(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
@@ -371,29 +401,72 @@ def fit_results(f):
                               for b in bands])
     return r
 
-def fit_images(f, bands=bands):
+
+def fit_images(f, bands=bands, zoom=None,
+               extensions=['input', 'model', 'residual']):
+    """Get the images from the specified galfit(m) filename(s)
+
+    `bands` should be a list of band id strings.
+    If fn includes a format placeholder `{}`, this will be replaced by each
+    band id in turn. Otherwise all bands are assumed to be in a single file.
+    """
     fn = 'fits/%s/fit%s.fits'%(f,f)
-    r = None
-    if os.path.exists(fn):
-        original = [pyfits.getdata(fn, 'input_%s'%b) for b in bands]
-        model = [pyfits.getdata(fn, 'model_%s'%b) for b in bands]
-        residual = [pyfits.getdata(fn, 'residual_%s'%b) for b in bands]
+    if not os.path.exists(fn):
+        fn = fn.replace('.fits', '{}.fits')
+    out = []
+    # auto-discovery of bands for galfitm files
+    multiband = True
+    if '{}' not in fn:
+        with pyfits.open(fn) as p:
+            names = [x.name for x in p]
+        ext = extensions[0].upper()
+        if ext in names:
+            multiband = False
+        else:
+            ext = ext + '_'
+            found_bands = [x.name.replace(ext, '') for x in p
+                           if x.name.startswith(ext)]
+            if bands is None:
+                bands = found_bands
+    print(bands)
+    if not multiband:
+        for ext in extensions:
+            try:
+                hdu = [pyfits.getdata(fn, ext)]
+            except KeyError:
+                hdu = None
+            out.append(hdu)
     else:
-        original = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'input_x') for b in bands]
-        model = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'model_x') for b in bands]
-        residual = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'residual_x') for b in bands]
-    return [original, model, residual]
+        for ext in extensions:
+            try:
+                if '{}' in fn:
+                    hdu = [pyfits.getdata(fn.format(b), ext)
+                           for b in bands]
+                else:
+                    hdu = [pyfits.getdata(fn, '{}_{}'.format(ext, b))
+                           for b in bands]
+            except KeyError:
+                hdu = None
+            out.append(hdu)
+    if zoom is not None:
+        for ib, b in enumerate(bands):
+            for i, xx in enumerate(out):
+                if xx is not None:
+                    shape = np.array(out[i][ib].shape)
+                    crop = shape * (1 - 1 / zoom) / 2
+                    crop = crop.round().astype(np.int)
+                    crop = crop.clip(0, shape // 2 - 1)
+                    icrop = [crop[0]] * 2
+                    jcrop = [crop[1]] * 2
+                    if xx is not None:
+                        out[i][ib] = out[i][ib][icrop[0]:-icrop[1],
+                                                jcrop[0]:-jcrop[1]]
+    return out
+
 
 def nonparam_images(f, bands=bands):
-    fn = 'fits/%s/fit%s.fits'%(f,f)
-    r = None
-    if os.path.exists(fn):
-        nonparam = [pyfits.getdata(fn, 'nonparam_%s'%b) for b in bands]
-        datasub = [pyfits.getdata(fn, 'datasub_%s'%b) for b in bands]
-    else:
-        nonparam = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'nonparam_x') for b in bands]
-        datasub = [pyfits.getdata('fits/%s/fit%s%s.fits'%(f,f, b), 'datasub_x') for b in bands]
-    return [nonparam, datasub]
+    return fit_images(f, bands, extensions=['nonparam'])[0]
+
 
 def fit_func(f):
     fn = 'fits/%s/fit%s.fits'%(f,f)
@@ -409,9 +482,9 @@ def fit_func(f):
     else:
         r = None
     return r
-    
 
-def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):    
+
+def make_bands_plot(fig, subplot=111, ylabel='', top=True, bottom=True):
     ax1 = fig.add_subplot(*subplot)
     ax2 = ax1.twiny()
     ax1.set_ylabel(ylabel)
@@ -451,7 +524,7 @@ class Sersic:
         return self.mu_r(r)
     def mu_r(self, r):
         # Returns the surface brightess at specified major axis radius,
-        # within annular ellipses corresponding to the shape of each component individualy 
+        # within annular ellipses corresponding to the shape of each component individualy
         # Taking, e.g. colours, this currently assumes major axes of components align
         # to be more generally correct need to account for AR, PA, XC, YC,
         # and either select specific vector, or properly compute azimuthal average
