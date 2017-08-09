@@ -63,7 +63,8 @@ exp_flat = numpy.array([1]*9)
 
 fade = 0.0  # all models normalised to r=16
 
-def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K']):
+def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'K'],
+                correlated_noise=0):
     if noisetype == 'realistic':
         zp = zp_realistic
         sky = sky_realistic
@@ -87,36 +88,80 @@ def make_images(model='A', brighten=0, bandsel=['u', 'g', 'r', 'i', 'z', 'Y', 'J
                 zp_factor = 10**(0.4*(zp[j]-29-fade))
                 ext.data *= zp_factor
                 brighten_factor = 10**(0.4*brighten)
-                if noisetype == 'simple':
-                    sigma = numpy.sqrt(sky[j]/exp[j]*brighten_factor)/brighten_factor
+                #noise = numpy.random.normal(0.0, 1.0, sigma.shape) * sigma
+                # implement correlated noise with a gaussian random field
+                if correlated_noise == 0:
+                    if noisetype == 'simple':
+                        sigma = numpy.sqrt(sky[j]/exp[j]*brighten_factor)/brighten_factor
+                    else:
+                        sigma = numpy.sqrt((ext.data + sky[j])/exp[j]*brighten_factor)/brighten_factor
+                    noise = numpy.random.normal(0.0, 1.0, sigma.shape) * sigma
                 else:
-                    sigma = numpy.sqrt((ext.data+sky[j])/exp[j]*brighten_factor)/brighten_factor
-                ext.data += numpy.random.normal(0.0, 1.0, sigma.shape) * sigma
-                pyfits.writeto(imgname+'_%i%s_%s%i_sigma.fits'%(j+1, b, noisetype[0], brighten), sigma, clobber=True)
-                pyfits.writeto(imgname+'_%i%s_%s%i.fits'%(j+1, b, noisetype[0], brighten), ext.data, clobber=True)
+                    noise = gaussian_random_field(Pk = lambda k: k**(-correlated_noise), size=ext.data.shape[0])
+                    noise = noise.real
+                    noise /= noise.std()
+                    sky_sigma = numpy.sqrt(sky[j]/exp[j]*brighten_factor)/brighten_factor
+                    if noisetype == 'simple':
+                        sigma = sky_sigma
+                    else:
+                        data_sigma = numpy.sqrt(ext.data/exp[j]*brighten_factor)/brighten_factor
+                        sigma = numpy.sqrt(sky_sigma**2 + data_sigma**2)
+                        noise *= sky_sigma
+                        noise += numpy.random.normal(0.0, 1.0, sigma.shape) * data_sigma
+                ext.data += noise
+                label = '%i%s_%s%i'%(j+1, b, noisetype[0], brighten)
+                if correlated_noise != 0:
+                    label += '_c{:.1f}'.format(correlated_noise)
+                pyfits.writeto(imgname+'_%s_sigma.fits'%(label), sigma, clobber=True)
+                pyfits.writeto(imgname+'_%s.fits'%(label), ext.data, clobber=True)
+
+
+# from http://andrewwalker.github.io/statefultransitions/post/gaussian-fields/
+def fftIndgen(n):
+    a = range(0, n/2+1)
+    b = range(1, n/2)
+    b.reverse()
+    b = [-i for i in b]
+    return a + b
+
+def gaussian_random_field(Pk = lambda k : k**-3.0, size = 100):
+    def Pk2(kx, ky):
+        if kx == 0 and ky == 0:
+            return 0.0
+        return numpy.sqrt(Pk(numpy.sqrt(kx**2 + ky**2)))
+    noise = numpy.fft.fft2(numpy.random.normal(size = (size, size)))
+    amplitude = numpy.zeros((size,size))
+    for i, kx in enumerate(fftIndgen(size)):
+        for j, ky in enumerate(fftIndgen(size)):
+            amplitude[i, j] = Pk2(kx, ky)
+    return numpy.fft.ifft2(noise * amplitude)
 
 
 if __name__ =='__main__':
-    make_images('A', 0)
-    make_images('A', 2)
-    make_images('A', -2, ['g','i','Y','H'])
-    make_images('B', 0)
-    make_images('B', 2)
-    make_images('B', -2, ['g','i','Y','H'])
-    for x in 'abcdefghi':
-        make_images('C'+x, 0, ['r'])
-        make_images('C'+x, 2, ['r'])
-    make_images('D', 0)
-    make_images('D', 2)
-    make_images('D', -2, ['g','i','Y','H'])
-    make_images('E', 0)
-    make_images('E', 2)
-    make_images('E', -2, ['g','i','Y','H'])
-    make_images('NA', 0)
-    make_images('NA', 2)
-    make_images('NB', 0)
-    make_images('NB', 2)
-    make_images('NC', 0)
-    make_images('NC', 2)
-    for x in 'abcdefghi':
-        make_images('W'+x, 0)
+    # make_images('A', 0)
+    # make_images('A', 2)
+    # make_images('A', -2, ['g','i','Y','H'])
+    # make_images('B', 0)
+    # make_images('B', 2)
+    # make_images('B', -2, ['g','i','Y','H'])
+    # for x in 'abcdefghi':
+    #     make_images('C'+x, 0, ['r'])
+    #     make_images('C'+x, 2, ['r'])
+    # make_images('D', 0)
+    # make_images('D', 2)
+    make_images('D', 0, correlated_noise=0.0001)
+    make_images('D', 0, correlated_noise=0.5)
+    make_images('D', 0, correlated_noise=1)
+    make_images('D', 0, correlated_noise=2)
+    # make_images('D', -2, ['g','i','Y','H'])
+    # make_images('E', 0)
+    # make_images('E', 2)
+    # make_images('E', -2, ['g','i','Y','H'])
+    # make_images('NA', 0)
+    # make_images('NA', 2)
+    # make_images('NB', 0)
+    # make_images('NB', 2)
+    # make_images('NC', 0)
+    # make_images('NC', 2)
+    # for x in 'abcdefghi':
+    #     make_images('W'+x, 0)

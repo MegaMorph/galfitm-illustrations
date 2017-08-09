@@ -21,7 +21,7 @@ matplotlib.rcParams.update({'font.size': 16,
                             'font.serif': 'times',
                             'text.usetex': True})
 
-labelsize = 12
+labelsize = 16
 
 rescolmap = matplotlib.colors.LinearSegmentedColormap.from_list('rescol', ('blue', 'black', 'white', 'red'), N=256, gamma=1.0)
 
@@ -59,13 +59,13 @@ sim_E_bulge = {'MAG': 1.0 + numpy.array([18.546,17.519,15.753,15.084,14.764,14.6
 marker = ['o', '^', 's', 'D', 'x', '+', '*']
 linestyle = [':', '-', '-.', (0, '.-.')]
 
-ylim_std = {'MAG': (19.05, 13.45), 'Re': (5.05, 29.95), 'n': (0.05, 5.95),
+ylim_std = {'MAG': (19.05, 13.45), 'Re': (6.05, 28.95), 'n': (2.05, 5.95),
             'AR': (0.41, 0.79), 'PA': (35.05, 64.95)}
 
-ylim_disk = {'MAG': (20.05, 14.45), 'Re': (10.05, 24.95), 'n': (0.05, 2.95),
+ylim_disk = {'MAG': (20.05, 14.45), 'Re': (13.05, 22.95), 'n': (0.05, 2.95),
              'AR': (0.21, 0.89), 'PA': (35.05, 64.95)}
 
-ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (0.05, 12.95), 'n': (2.05, 7.95),
+ylim_bulge = {'MAG': (20.05, 14.45), 'Re': (1.05, 12.95), 'n': (2.05, 6.95),
               'AR': (0.61, 1.09), 'PA': (0.05, 89.95)}
 
 #varlist_std = ('MAG', 'Re', 'n', 'AR', 'PA')
@@ -173,7 +173,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
             plotnonparamcolimg(npid, name)
 
 
-def plotimg(id, name='0'):
+def plotimg(id, name='0', asinh=True):
     cmap_img = pyplot.cm.gray
     cmap_res = rescolmap
     norm_res = None
@@ -183,6 +183,15 @@ def plotimg(id, name='0'):
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.95, hspace=0.0, wspace=0.0)
     for i, iid in enumerate(id):
         img = fit_images(iid)
+        if asinh:
+            for j, jimg in enumerate(img):
+                for iimg in jimg:
+                    if j != 2:
+                        iimg[iimg <= 0] = 0.0
+                    else:
+                        iimg /= 10.0
+                    iimg *= 0.1
+                    iimg[:] = numpy.arcsinh(iimg)
         if i == 0:
             vmin = []
             vmax = []
@@ -192,9 +201,9 @@ def plotimg(id, name='0'):
                 if ib==nbands-1:
                     ax.set_xlabel('image', fontsize=labelsize)
                 ticksoff(ax)
-                vmin.append(scoreatpercentile(img[0][ib].ravel(), 0.1))
-                vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9))
-                vrange.append(scoreatpercentile(img[2][ib].ravel(), 99.9) - scoreatpercentile(img[2][ib].ravel(), 0.1))
+                vmin.append(scoreatpercentile(img[0][ib].ravel(), 50))
+                vmax.append(scoreatpercentile(img[0][ib].ravel(), 99.9) * 1.1)
+                vrange.append((scoreatpercentile(img[2][ib].ravel(), 99) - scoreatpercentile(img[2][ib].ravel(), 1)) * 1.5)
                 pyplot.imshow(img[0][ib][::-1], cmap=cmap_img, vmin=vmin[ib], vmax=vmax[ib], interpolation='nearest')
                 ax.set_ylabel('$%s$'%b, fontsize=labelsize)
         for ib, b in enumerate(bands):
@@ -209,7 +218,7 @@ def plotimg(id, name='0'):
                 ax.set_xlabel('residual %s'%iid, fontsize=labelsize)
             ticksoff(ax)
             pyplot.imshow(img[2][ib][::-1], cmap=cmap_res, norm=norm_res, vmin=-vrange[ib], vmax=vrange[ib], interpolation='nearest')
-    fig.savefig('plots/images_%s.pdf'%name)
+    fig.savefig('plots/images_%s.pdf'%name, dpi=300)
     pyplot.close('all')
 
 
@@ -246,7 +255,7 @@ def plotcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         colimg = RGBImage(*img[2], scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
-    fig.savefig('plots/colimages_%s.pdf'%name)
+    fig.savefig('plots/colimages_%s.pdf'%name, dpi=300)
     pyplot.close('all')
 
 
@@ -321,7 +330,7 @@ def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         colimg = RGBImage(*datasub, scales=scales, beta=beta,
                           desaturate=desaturate).img
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
-    fig.savefig('plots/nonparamcolimages_%s.pdf'%name)
+    fig.savefig('plots/nonparamcolimages_%s.pdf'%name, dpi=300)
     pyplot.close('all')
 
 
@@ -402,7 +411,7 @@ def fit_results(f):
     return r
 
 
-def fit_images(f, bands=bands, zoom=None,
+def fit_images(f, bands=bands, zoom=2.0,
                extensions=['input', 'model', 'residual']):
     """Get the images from the specified galfit(m) filename(s)
 
@@ -452,9 +461,9 @@ def fit_images(f, bands=bands, zoom=None,
         for ib, b in enumerate(bands):
             for i, xx in enumerate(out):
                 if xx is not None:
-                    shape = np.array(out[i][ib].shape)
+                    shape = numpy.array(out[i][ib].shape)
                     crop = shape * (1 - 1 / zoom) / 2
-                    crop = crop.round().astype(np.int)
+                    crop = crop.round().astype(numpy.int)
                     crop = crop.clip(0, shape // 2 - 1)
                     icrop = [crop[0]] * 2
                     jcrop = [crop[1]] * 2
@@ -642,7 +651,6 @@ def make_funcs(id):
                 func[i][compno-1].append(Sersic(mag[k], re[k], n[k], ar[k], pa[k], xc[k], yc[k]))
             remax = max(remax, re.max())
     return func, remax
-
 
 if __name__ =='__main__':
     plot_all()
