@@ -110,6 +110,8 @@ def plot_standard():
     plot(('E5', 'E4', 'E6'), 2, '11-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
     plot(('Eh5', 'Eh4', 'Eh6'), 1, '11h-1', 'True', ylim=ylim_bulge, sim=sim_E_bulge, varlist=('MAG', 'Re', 'n'))
     plot(('Eh5', 'Eh4', 'Eh6'), 2, '11h-2', 'True', ylim=ylim_disk, sim=sim_E_disk, varlist=('MAG', 'Re'))
+    plot(('Dc5', 'Dc4', 'Dc6'), 1, '12-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
+    plot(('Dc5', 'Dc4', 'Dc6'), 2, '12-2', 'True', ylim=ylim_disk, sim=sim_D_disk, varlist=('MAG', 'Re'))
 
 def plot_nonparam():
     plot(('NA1n', 'NA1'), 1, 'N01', 'True')
