@@ -100,6 +100,7 @@ def plot_standard():
     # plot(('Ah1', 'Ah1c', 'Ah1d'), 1, '06h', 'True')
     # illustration 7 requires a different kind of plot
     plot(('D2', 'D1', 'D3'), 1, '08', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))
+    plot(('D1a', 'D1'), 1, '08a', 'True', varlist=('MAG', 'Re', 'n', 'AR', 'PA'))
     plot(('A5', 'A4', 'A6'), 1, '09-1', 'True', ylim=ylim_bulge, sim=sim_A_bulge, varlist=('MAG', 'Re', 'n'))
     plot(('A5', 'A4', 'A6'), 2, '09-2', 'True', ylim=ylim_disk, sim=sim_A_disk, varlist=('MAG', 'Re'))
     plot(('D5', 'D4', 'D6'), 1, '10-1', 'True', ylim=ylim_bulge, sim=sim_D_bulge, varlist=('MAG', 'Re', 'n'))
@@ -125,7 +126,8 @@ def plot_nonparam():
 
 
 def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
-         varlist=varlist_std, ylim=ylim_std, sim=sim_std, submag=True):
+         varlist=varlist_std, ylim=ylim_std, sim=sim_std, submag=True,
+         legends=None):
     print name, ':', id
     res = [fit_results(i) for i in id]
     if show_func:
@@ -134,7 +136,7 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         func = None
     nvar = len(varlist)
     fig = pyplot.figure(figsize=(5, 15))
-    fig.subplots_adjust(bottom=0.1, top=0.94, left=0.2, right=0.95, hspace=0.075)
+    fig.subplots_adjust(bottom=0.1, top=0.9, left=0.2, right=0.95, hspace=0.075)
     for i, v in enumerate(varlist):
         if v == 'MAGNOSUB':
             v = 'MAG'
@@ -146,23 +148,46 @@ def plot(id=('A2', 'A1'), compno=1, name='0', show_func=False,
         if v in sim.keys():
             sv = sim[v]
             if vsubmag and v == 'MAG':
-                sub = interp1d(w, sim[v], 'cubic', bounds_error=False)
+                sub = interp1d(w, sim[v], 'cubic', bounds_error=False, fill_value='extrapolate')
             if sub is not None:
                 sv = sim[v] - sub(w)
                 ax.set_ylabel('$\Delta ' + labels[v][1:])
             pyplot.plot(w, sv, '-k', alpha=0.75)
-        plotres(res, id, 'COMP%i_%s'%(compno, v), func, sub=sub, norm=norm)
+        plotres(res, id, 'COMP%i_%s'%(compno, v), func, sub=sub, norm=norm, legends=None)
         if v in sim.keys():
             pyplot.plot(w, sv, 'xk', markersize=10.0, alpha=0.75)
         if sub is None:
             pyplot.ylim(ylim[v])
         else:
             pyplot.ylim(numpy.subtract(ylim[v], numpy.mean(ylim[v], 0))/3.0)
-        if i == nvar-1:
             #pyplot.legend(loc='lower right', numpoints=1, prop={'size': 16})
-            pyplot.legend(loc='upper left', numpoints=1, prop={'size': 16},
-                          bbox_to_anchor=(0., -.35, 1., .1),
-                          ncol=4, mode="expand", borderaxespad=0.)
+        if compno == 1 and ('-' not in name):
+            if i == nvar-1:
+                pyplot.legend(loc='upper left', numpoints=1, prop={'size': 16},
+                              bbox_to_anchor=(0., -.35, 1., .1),
+                              ncol=4, mode="expand", borderaxespad=0.)
+        elif compno == 1:
+            if i == nvar-1:
+                pyplot.text(0.5, -0.25, 'bulge',
+                            horizontalalignment='center',
+                            verticalalignment='top',
+                            transform = ax.transAxes)
+        elif compno == 2:
+            if i == nvar-1:
+                pyplot.text(0.5, -0.25, 'disc',
+                            horizontalalignment='center',
+                            verticalalignment='top',
+                            transform = ax.transAxes)
+            if i == 0:
+                pyplot.legend(loc='lower left', numpoints=1, prop={'size': 16},
+                              bbox_to_anchor=(0., 1.45, 1., .1),
+                              ncol=4, mode="expand", borderaxespad=0.)
+        if i == nvar-1:
+            # invisible text to ensure plots line up after cropping
+            pyplot.text(0.5, -0.30, '\_', color='white',
+                        horizontalalignment='center',
+                        verticalalignment='top',
+                        transform = ax.transAxes)
     fig.savefig('plots/illustration_%s.pdf'%name)
     pyplot.close('all')
     if compno==1:
@@ -275,7 +300,6 @@ def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         # First row, results without nonparam
         if original_iid != iid[:-1]:
             original_iid = iid[:-1]
-            print original_iid
             img = fit_images(original_iid, rgb)
             img[0] = [img[0][j] - offsets[j] for j in range(3)]
             img[1] = [img[1][j] - offsets[j] for j in range(3)]
@@ -316,7 +340,6 @@ def plotnonparamcolimg(id, name='0', rgb='Hzg', desaturate=True, pedestal=0):
         pyplot.imshow(colimg, interpolation='nearest', origin='lower')
         # Third row, nonparam diagnostics
         nonparam = nonparam_images(iid, rgb)
-        print(len(nonparam))
         datasub = [img[0][j] - nonparam[j] for j in range(3)]
         nonparam = [nonparam[j] - offsets[j] for j in range(3)]
         datasub = [datasub[j] - offsets[j] for j in range(3)]
@@ -343,7 +366,7 @@ def ticksoff(ax):
     ax.set_yticks([])
 
 
-def plotres(res, id, field, func=None, sub=None, norm=None):
+def plotres(res, id, field, func=None, sub=None, norm=None, legends=None):
     nid = len(id)
     #mec = ['black', None] * (1+nid//2)
     #mfc = ['white', 'black'] * (1+nid//2)
@@ -377,10 +400,14 @@ def plotres(res, id, field, func=None, sub=None, norm=None):
             rerr = rerr / norm(w)
         #alpha = 1 - i * 0.2
         alpha = 1
+        if legends is not None:
+            label = legends[i]
+        else:
+            label = iid
         pyplot.errorbar(x, r, rerr, color=mec[i],
                         marker=marker[i//2], mec=mec[i],
                         markerfacecolor=mfc[i], linestyle='',
-                        label=iid, alpha=alpha)
+                        label=label, alpha=alpha)
         ymin = min(ymin, (r-rerr).min())
         ymax = max(ymax, (r+rerr).max())
     yrange = ymax - ymin
@@ -389,8 +416,10 @@ def plotres(res, id, field, func=None, sub=None, norm=None):
     pyplot.ylim(ymin, ymax)
 
 def plotfunc(func, wlfunc=None, color='red', label='', sub=None, norm=None):
-    dx = (xlim[1] - xlim[0]) / 1000.0
-    x = numpy.arange(xlim[0], xlim[1]+dx/2.0, dx)
+    #dx = (xlim[1] - xlim[0]) / 1000.0
+    #x = numpy.arange(xlim[0], xlim[1]+dx/2.0, dx)
+    dx = (w[-1] - w[0]) / 1000.0
+    x = numpy.arange(w[0], w[-1]+dx/2.0, dx)
     if wlfunc is None:
         xfunc = x
     else:
@@ -439,7 +468,6 @@ def fit_images(f, bands=bands, zoom=2.0,
                            if x.name.startswith(ext)]
             if bands is None:
                 bands = found_bands
-    print(bands)
     if not multiband:
         for ext in extensions:
             try:
@@ -571,7 +599,6 @@ def plotprof(id=('A1', 'A2'), name='0'):
     rmax = remax*3.0001
     r = numpy.arange(rmax/10000.0, rmax, rmax/100.0)
     for i, iid in enumerate(id):
-        print i
         for j in range(len(func[i])):
             for k, band in enumerate(bands):
                 if k == 0:
@@ -602,7 +629,6 @@ def plotcolprof(id=('A1', 'A2'), name='0'):
     rmax = remax*3.0001
     r = numpy.arange(rmax/10000.0, rmax, rmax/100.0)
     for i, iid in enumerate(id):
-        print i
         for k in range(len(bands)-1):
             f1 = f2 = f1max = f2max = 0.0
             for j in range(len(func[i])):
